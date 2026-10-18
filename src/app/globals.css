@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gm-navy: #0a1931;
+  --gm-royal: #2563eb;
+  --gm-gold: #d97706;
+}
+
+body {
+  font-feature-settings: "cv11", "ss01";
+}
+
+.gm-card {
+  @apply rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md;
+}
+
+.gm-badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+}
+
+.gm-input {
+  @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-royal-500 focus:ring-2 focus:ring-royal-100;
+}
+
+.gm-label {
+  @apply mb-1.5 block text-sm font-semibold text-slate-700;
+}
+
+.gm-btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-navy-900 disabled:opacity-50;
+}
+
+.gm-btn-gold {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ochre-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-ochre-600 disabled:opacity-50;
+}
+
+.gm-btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50;
+}

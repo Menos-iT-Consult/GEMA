@@ -1,0 +1,1 @@
+export type RegForm = { name: string; slug: string; denomination: string; umbrellaBody: string; regNo: string; email: string; phone: string; region: string; city: string; gps: string; address: string; mission: string; leader: string; focus: string[]; logoKey: string; bannerKey: string; legalKey: string; accept: boolean; signer: string; title: string; };
