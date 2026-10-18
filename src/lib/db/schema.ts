@@ -91,7 +91,9 @@ export const organizations = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull()
   },
-  (t) => [uniqueIndex("org_slug_idx").on(t.slug)]
+  (t) => ({
+    orgSlugIdx: uniqueIndex("org_slug_idx").on(t.slug),
+  })
 );
 
 export const users = pgTable("users", {
