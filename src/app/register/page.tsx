@@ -16,7 +16,7 @@ export default function RegisterPage() {
           <div className="gm-card mt-6 p-8 text-center">
             <p className="font-serif text-2xl font-bold text-emerald-700">Application received!</p>
             <p className="mt-2 text-sm text-slate-600">Reference: <span className="font-mono font-bold">{done}</span></p>
-            <a href="/directory" className="gm-btn-primary mt-6">Browse Directory</a>
+            <a href="/" className="gm-btn-primary mt-6">Browse Directory</a>
           </div>
         ) : (
           <RegisterForm onDone={setDone} />

@@ -10,7 +10,7 @@ Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2
 5. `npm run dev`
 
 ## Routes
-- `/` landing, `/directory` filters + grid/list + profile modal + regional hub
+- `/` directory (filters + grid/list + profile modal + regional hub); `/directory` redirects to `/`
 - `/register` 4-step onboarding (R2 presigned uploads, faith affirmation -> PENDING_REVIEW)
 - `/admin` stats, region/denomination breakdown, approvals queue, CSV export
 - APIs: `GET /api/organizations`, `POST /api/register`, `POST /api/uploads/presign`, `GET|PATCH|POST /api/admin`, `POST /api/auth/login`
