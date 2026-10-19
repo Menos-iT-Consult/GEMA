@@ -9,9 +9,22 @@ export default function AdminLogin() {
   const router = useRouter();
   async function go(e: React.FormEvent) {
     e.preventDefault(); setBusy(true); setErr(null);
-    const r = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password: pw }) });
-    if (!r.ok) { setErr("Invalid credentials"); setBusy(false); return; }
-    router.push("/admin");
+    try {
+      const r = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password: pw }) });
+      if (!r.ok) {
+        let msg = "Login failed. Please try again.";
+        try {
+          const data = await r.json();
+          if (data?.error) msg = data.error;
+          if (data?.detail) msg += ` — ${data.detail}`;
+        } catch { /* non-JSON response (e.g. 500 HTML) */ }
+        if (r.status >= 500 && !msg.includes("—")) msg = `Server error (${r.status}). Please try again later.`;
+        setErr(msg); setBusy(false); return;
+      }
+      router.push("/admin");
+    } catch {
+      setErr("Network error — could not reach the server."); setBusy(false);
+    }
   }
   return (
     <main className="mx-auto max-w-sm px-4 py-20">
