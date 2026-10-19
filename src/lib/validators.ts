@@ -60,3 +60,19 @@ export const createDuesSchema = z.object({
   status: z.enum(["PAID", "PENDING", "OVERDUE"]).default("PENDING"),
   paymentReference: z.string().max(200).optional().nullable()
 });
+
+export const updateDuesSchema = z.object({
+  duesId: z.string().uuid(),
+  status: z.enum(["PAID", "PENDING", "OVERDUE"]),
+  paymentReference: z.string().max(200).optional().nullable()
+});
+
+export const updateUserSchema = z
+  .object({
+    userId: z.string().uuid(),
+    isActive: z.union([z.literal(0), z.literal(1)]).optional(),
+    role: z.enum(["SUPER_ADMIN", "REGIONAL_OVERSEER", "ORG_ADMIN", "MEMBER_VIEWER"]).optional()
+  })
+  .refine((v) => v.isActive !== undefined || v.role !== undefined, {
+    message: "Provide isActive or role"
+  });

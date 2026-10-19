@@ -34,9 +34,6 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <Link href="/register" className="gm-btn-gold ml-2 hidden !py-2.5 sm:inline-flex">
-            Register Ministry
-          </Link>
           <button
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 lg:hidden"
             aria-label="Toggle menu"
@@ -58,13 +55,6 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <Link
-            href="/register"
-            onClick={() => setOpen(false)}
-            className="gm-btn-gold mt-1 block !py-3"
-          >
-            Register Ministry
-          </Link>
         </div>
       )}
     </header>

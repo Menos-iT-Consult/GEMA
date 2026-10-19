@@ -32,12 +32,6 @@ export default function HomePage() {
               <Link href="/directory" className="gm-btn-gold">
                 <Search className="h-4 w-4" /> Explore Directory
               </Link>
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/25 px-5 py-3 text-sm font-semibold hover:bg-white/10"
-              >
-                Register Your Ministry
-              </Link>
             </div>
             <dl className="mt-12 grid max-w-2xl grid-cols-3 gap-4 text-center">
               {[

@@ -16,7 +16,6 @@ export default function Footer() {
           <p className="text-sm font-bold uppercase tracking-wider text-white">Explore</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-300">
             <li><a className="hover:text-white" href="/directory">Directory</a></li>
-            <li><a className="hover:text-white" href="/register">Register Ministry</a></li>
           </ul>
         </div>
         <div>
