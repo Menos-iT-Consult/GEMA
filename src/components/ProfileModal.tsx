@@ -49,17 +49,17 @@ export default function ProfileModal({
             </div>
           </div>
         </div>
-        <div className="grid gap-6 p-6 sm:p-8 md:grid-cols-2">
-          <div>
+        <div className="grid gap-6 p-4 sm:p-6 md:grid-cols-2">
+          <div className="space-y-3 sm:col-span-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Mission</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">{org.missionStatement || "—"}</p>
-            <h3 className="mt-5 text-sm font-bold uppercase tracking-wider text-slate-500">Ministry Focus</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Ministry Focus</h3>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {(org.ministryFocus ?? []).map((f) => (
                 <span key={f} className="gm-badge bg-ochre-50 text-ochre-600">{f}</span>
               ))}
             </div>
-            <h3 className="mt-5 text-sm font-bold uppercase tracking-wider text-slate-500">Statement of Faith</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Statement of Faith</h3>
             <p className="mt-2 text-sm text-slate-700">
               {org.statementOfFaithSignedAt
                 ? `Affirmed by ${org.signedByLeaderName} (${org.signedByLeaderTitle}) on ${new Date(org.statementOfFaithSignedAt).toLocaleDateString("en-GH")}`
@@ -71,7 +71,7 @@ export default function ProfileModal({
               </a>
             )}
           </div>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm sm:col-span-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Leadership & Contact</h3>
             <p><span className="font-semibold">Leader:</span> {org.leaderName || org.signedByLeaderName || "—"}</p>
             <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-slate-400" /> {org.email}</p>
@@ -82,7 +82,7 @@ export default function ProfileModal({
             <p className="text-slate-600">{org.physicalAddress}</p>
             {org.registrationNumber && <p><span className="font-semibold">RGD No:</span> {org.registrationNumber}</p>}
             {org.socialLinks && Object.keys(org.socialLinks).length > 0 && (
-              <div className="flex gap-2 pt-1">
+              <div className="flex flex-wrap gap-2 pt-1">
                 {Object.entries(org.socialLinks as Record<string, string>).map(([k, v]) =>
                   v ? (
                     <a key={k} href={v} target="_blank" className="gm-btn-ghost !px-3 !py-1.5 text-xs capitalize">{k}</a>

@@ -6,13 +6,13 @@ export default function RegionHub({ counts }: { counts: Record<string, number> }
     <div className="gm-card p-5">
       <h3 className="font-serif text-lg font-bold text-navy-950">Regional Hub — Member Distribution</h3>
       <p className="mt-1 text-sm text-slate-600">Live overview across Ghana&apos;s 16 regions.</p>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+      <div>
         {GHANA_REGIONS.map((r) => {
           const c = counts[r] ?? 0;
           const pct = Math.round((c / max) * 100);
           return (
-            <div key={r} className="rounded-xl bg-slate-50 p-3">
-              <div className="flex items-center justify-between text-sm">
+            <div key={r} className="gm-card rounded-xl border border-slate-200 p-3 sm:p-4">
+              <div className="flex items-center justify-between gap-2">
                 <span className="font-semibold text-slate-700">{r}</span>
                 <span className="rounded-full bg-navy-950 px-2 py-0.5 text-xs font-bold text-white">{c}</span>
               </div>

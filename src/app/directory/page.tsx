@@ -65,8 +65,8 @@ export default function DirectoryPage() {
           </div>
         </div>
         <div className="gm-card mt-5 p-4">
-          <div className="grid gap-3 md:grid-cols-6">
-            <label className="relative md:col-span-2">
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-6">
+            <label className="relative sm:col-span-2">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, leader, city…" className="gm-input !pl-9" />
             </label>

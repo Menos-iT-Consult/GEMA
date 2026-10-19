@@ -30,13 +30,13 @@ export default function OrgCard({
     >
       {layout === "grid" ? (
         <>
-          <div className="relative h-36 bg-gradient-to-br from-navy-950 via-navy-800 to-royal-600">
+          <div className="relative h-28 bg-gradient-to-br from-navy-950 via-navy-800 to-royal-600 sm:h-36">
             <div className="absolute inset-0 flex items-center justify-center">
               {logo ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={logo} alt={org.name} className="h-20 w-20 rounded-2xl bg-white object-cover p-1" />
+                <img src={logo} alt={org.name} className="h-14 w-14 rounded-2xl bg-white object-cover p-1 sm:h-20 sm:w-20" />
               ) : (
-                <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/95 font-serif text-3xl font-bold text-navy-950">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/95 font-serif text-3xl font-bold text-navy-950 sm:h-20 sm:w-20">
                   {org.name.charAt(0)}
                 </span>
               )}
@@ -50,16 +50,16 @@ export default function OrgCard({
               {org.region}
             </span>
           </div>
-          <div className="p-4">
-            <h3 className="font-serif text-lg font-bold leading-snug text-navy-950">{org.name}</h3>
-            <p className="mt-1 flex items-center gap-1 text-sm text-slate-600">
-              <MapPin className="h-3.5 w-3.5" /> {org.cityTown}
+          <div className="p-3 sm:p-4">
+            <h3 className="font-serif text-base font-bold leading-snug text-navy-950 sm:text-lg">{org.name}</h3>
+            <p className="mt-1 flex items-center gap-1 text-xs text-slate-600 sm:text-sm">
+              <MapPin className="h-3 w-3" /> {org.cityTown}
               {org.digitalAddress ? ` • ${org.digitalAddress}` : ""}
             </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3">
               <span className="gm-badge bg-royal-50 text-royal-600">{org.denomination}</span>
               <span className="gm-badge bg-slate-100 text-slate-700">{org.umbrellaBody}</span>
-              {(org.ministryFocus ?? []).slice(0, 3).map((f) => (
+              {(org.ministryFocus ?? []).slice(0, 2).map((f) => (
                 <span key={f} className="gm-badge bg-ochre-50 text-ochre-600">{f}</span>
               ))}
             </div>
@@ -67,7 +67,7 @@ export default function OrgCard({
         </>
       ) : (
         <>
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-navy-950 font-serif text-2xl font-bold text-ochre-300">
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-navy-950 font-serif text-2xl font-bold text-ochre-300 sm:h-20 sm:w-20">
             {logo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logo} alt={org.name} className="h-16 w-16 rounded-xl object-cover" />
@@ -76,7 +76,7 @@ export default function OrgCard({
             )}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="flex items-center gap-2 font-serif text-lg font-bold text-navy-950">
+            <span className="flex items-center gap-2 font-serif text-base font-bold text-navy-950 sm:text-lg">
               {org.name}
               {verified && <BadgeCheck className="h-4 w-4 text-emerald-600" />}
             </span>
@@ -84,7 +84,7 @@ export default function OrgCard({
               {org.cityTown}, {org.region} • {org.denomination} • {org.umbrellaBody}
             </span>
             <span className="mt-2 flex flex-wrap gap-1.5">
-              {(org.ministryFocus ?? []).slice(0, 4).map((f) => (
+              {(org.ministryFocus ?? []).slice(0, 3).map((f) => (
                 <span key={f} className="gm-badge bg-slate-100 text-slate-700">{f}</span>
               ))}
             </span>
