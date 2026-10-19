@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --gm-navy: #0a1931;
-  --gm-royal: #2563eb;
-  --gm-gold: #d97706;
+  --gm-navy: #08081f;
+  --gm-royal: #4c66af;
+  --gm-gold: #f47728;
+  --gm-green: #106f5f;
 }
 
 body {
@@ -29,7 +30,7 @@ body {
 }
 
 .gm-btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-navy-900 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gema-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gema-800 disabled:opacity-50;
 }
 
 .gm-btn-gold {
@@ -40,6 +41,3 @@ body {
   @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50;
 }
 
-.gm-mobile-nav {
-  @apply border-t border-slate-200 bg-white px-4 pb-6 pt-2 shadow-lg;
-}

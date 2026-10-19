@@ -30,7 +30,7 @@ export default function OrgCard({
     >
       {layout === "grid" ? (
         <>
-          <div className="relative h-28 bg-gradient-to-br from-navy-950 via-navy-800 to-royal-600 sm:h-36">
+          <div className="relative h-28 bg-gradient-to-br from-gema-800 via-gema-600 to-gema-400 sm:h-36">
             <div className="absolute inset-0 flex items-center justify-center">
               {logo ? (
                 // eslint-disable-next-line @next/next/no-img-element

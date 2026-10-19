@@ -28,7 +28,7 @@ export default function RegisterSteps2({ f, setF, setBusy, setErr, step }: P) {
     <div className="mt-5 grid gap-4">
       <div><label className="gm-label">Mission statement</label><textarea className="gm-input" rows={3} value={f.mission} onChange={(e) => set("mission", e.target.value)} /></div>
       <div><label className="gm-label">Head / Leader name</label><input className="gm-input" value={f.leader} onChange={(e) => set("leader", e.target.value)} /></div>
-      <div><span className="gm-label">Ministry focus</span><div className="flex flex-wrap gap-2">{MINISTRY_FOCUS_OPTIONS.map((m) => <button type="button" key={m} onClick={() => toggle(m)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${f.focus.includes(m) ? "bg-navy-950 text-white" : "bg-slate-100 text-slate-600"}`}>{m}</button>)}</div></div>
+      <div><span className="gm-label">Ministry focus</span><div className="flex flex-wrap gap-2">{MINISTRY_FOCUS_OPTIONS.map((m) => <button type="button" key={m} onClick={() => toggle(m)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${f.focus.includes(m) ? "bg-gema-700 text-white" : "bg-slate-100 text-slate-600"}`}>{m}</button>)}</div></div>
       <div className="grid gap-3 rounded-xl border border-slate-200 p-4">
         <span className="gm-label">Website & social media <span className="font-normal normal-case text-slate-500">(optional)</span></span>
         <input className="gm-input" placeholder="Website — https://example.com" value={f.website} onChange={(e) => set("website", e.target.value)} />

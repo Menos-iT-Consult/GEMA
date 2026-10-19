@@ -25,7 +25,7 @@ export default function RegisterForm({ onDone }: { onDone: (s: string) => void }
   }
   return (
     <div className="gm-card mt-6 p-6">
-      <ol className="flex gap-2">{STEPS.map((s, i) => <li key={s} className={`flex-1 rounded-lg px-2 py-2 text-center text-xs font-bold ${i === step ? "bg-navy-950 text-white" : i < step ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{i + 1}. {s}</li>)}</ol>
+      <ol className="flex gap-2">{STEPS.map((s, i) => <li key={s} className={`flex-1 rounded-lg px-2 py-2 text-center text-xs font-bold ${i === step ? "bg-gema-700 text-white" : i < step ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{i + 1}. {s}</li>)}</ol>
       {err && <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{err}</p>}
       {step === 0 && <div className="mt-5 grid gap-4">
         <div><label className="gm-label">Name *</label><input className="gm-input" value={f.name} onChange={(e) => { set("name", e.target.value); set("slug", slugify(e.target.value)); }} /></div>
