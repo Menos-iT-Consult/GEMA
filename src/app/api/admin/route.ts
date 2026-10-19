@@ -119,10 +119,10 @@ export async function GET() {
   // Dues: totals + list with organisation names
   const [duesAgg] = await db
     .select({
-      collected: sql<number>`count(*) filter (where status = 'PAID')`,
-      totalGhs: sql<number>`coalesce(sum(amount_ghs) filter (where status = 'PAID'), 0)`,
-      pending: sql<number>`count(*) filter (where status = 'PENDING')`,
-      overdue: sql<number>`count(*) filter (where status = 'OVERDUE')`
+      collected: sql<number>`count(*) filter (where ${duesRecords.status} = 'PAID')`,
+      totalGhs: sql<number>`coalesce(sum(${duesRecords.amountGhs}) filter (where ${duesRecords.status} = 'PAID'), 0)`,
+      pending: sql<number>`count(*) filter (where ${duesRecords.status} = 'PENDING')`,
+      overdue: sql<number>`count(*) filter (where ${duesRecords.status} = 'OVERDUE')`
     })
     .from(duesRecords)
     .innerJoin(organizations, eq(duesRecords.orgId, organizations.id))

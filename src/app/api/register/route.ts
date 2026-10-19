@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
         cityTown: d.cityTown,
         digitalAddress: d.digitalAddress ?? null,
         physicalAddress: d.physicalAddress,
-        logoR2Key: d.logoR2Key ?? null,
+        logoR2Key: d.logoR2Key,
         bannerR2Key: d.bannerR2Key ?? null,
         legalDocR2Key: d.legalDocR2Key ?? null,
         status: "PENDING_REVIEW",

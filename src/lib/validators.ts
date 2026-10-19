@@ -24,7 +24,7 @@ export const registerOrgSchema = z.object({
     .optional()
     .nullable(),
   physicalAddress: z.string().min(3).max(500),
-  logoR2Key: z.string().max(500).optional().nullable(),
+  logoR2Key: z.string().min(1, "Logo is required").max(500),
   bannerR2Key: z.string().max(500).optional().nullable(),
   legalDocR2Key: z.string().max(500).optional().nullable(),
   missionStatement: z.string().max(2000).optional().nullable(),

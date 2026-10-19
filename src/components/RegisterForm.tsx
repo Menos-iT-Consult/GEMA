@@ -4,8 +4,9 @@ import { GHANA_REGIONS, DENOMINATIONS, UMBRELLA_BODIES } from "@/lib/constants";
 import { slugify } from "@/lib/utils";
 import RegisterSteps2 from "./RegisterSteps2";
 import type { RegForm } from "./RegTypes";
-const INIT: RegForm = { name: "", slug: "", denomination: "Pentecostal", umbrellaBody: "Independent", regNo: "", email: "", phone: "", region: "Greater Accra", city: "", gps: "", address: "", mission: "", leader: "", focus: [], logoKey: "", bannerKey: "", legalKey: "", accept: false, signer: "", title: "" };
+const INIT: RegForm = { name: "", slug: "", denomination: "Pentecostal", umbrellaBody: "Independent", regNo: "", email: "", phone: "", website: "", region: "Greater Accra", city: "", gps: "", address: "", mission: "", leader: "", focus: [], facebook: "", instagram: "", twitter: "", youtube: "", logoKey: "", bannerKey: "", legalKey: "", accept: false, signer: "", title: "" };
 const STEPS = ["Org", "Location", "Assets", "Faith"];
+const normUrl = (v: string) => { const t = v.trim(); if (!t) return ""; return /^https?:\/\//i.test(t) ? t : `https://${t}`; };
 export default function RegisterForm({ onDone }: { onDone: (s: string) => void }) {
   const [step, setStep] = useState(0);
   const [f, setF] = useState(INIT);
@@ -15,7 +16,8 @@ export default function RegisterForm({ onDone }: { onDone: (s: string) => void }
   async function submit() {
     setBusy(true); setErr(null);
     try {
-      const r = await fetch("/api/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: f.name, slug: f.slug || slugify(f.name), denomination: f.denomination, umbrellaBody: f.umbrellaBody, registrationNumber: f.regNo || null, email: f.email, phonePrimary: f.phone, region: f.region, cityTown: f.city, digitalAddress: f.gps || null, physicalAddress: f.address, logoR2Key: f.logoKey || null, bannerR2Key: f.bannerKey || null, legalDocR2Key: f.legalKey || null, missionStatement: f.mission || null, leaderName: f.leader || null, ministryFocus: f.focus, socialLinks: {}, statementOfFaithAccepted: f.accept, signedByLeaderName: f.signer, signedByLeaderTitle: f.title }) });
+      if (!f.logoKey) throw new Error("Logo is required — please upload your ministry logo.");
+      const r = await fetch("/api/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: f.name, slug: f.slug || slugify(f.name), denomination: f.denomination, umbrellaBody: f.umbrellaBody, registrationNumber: f.regNo || null, email: f.email, phonePrimary: f.phone, website: normUrl(f.website) || null, region: f.region, cityTown: f.city, digitalAddress: f.gps || null, physicalAddress: f.address, logoR2Key: f.logoKey, bannerR2Key: f.bannerKey || null, legalDocR2Key: f.legalKey || null, missionStatement: f.mission || null, leaderName: f.leader || null, ministryFocus: f.focus, socialLinks: Object.fromEntries(Object.entries({ facebook: f.facebook, instagram: f.instagram, twitter: f.twitter, youtube: f.youtube }).map(([k, v]) => [k, normUrl(v)]).filter(([, v]) => v !== "")), statementOfFaithAccepted: f.accept, signedByLeaderName: f.signer, signedByLeaderTitle: f.title }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Failed");
       onDone(d.organization.slug);
@@ -49,8 +51,8 @@ export default function RegisterForm({ onDone }: { onDone: (s: string) => void }
       {step >= 2 && <RegisterSteps2 f={f} setF={setF} busy={busy} setBusy={setBusy} setErr={setErr} step={step} />}
       <div className="mt-6 flex justify-between">
         <button disabled={step === 0 || busy} onClick={() => setStep(step - 1)} className="gm-btn-ghost">Back</button>
-        {step < 3 ? <button disabled={busy} onClick={() => setStep(step + 1)} className="gm-btn-primary">Continue</button>
-        : <button disabled={busy || !f.accept} onClick={submit} className="gm-btn-gold">{busy ? "Submitting" : "Submit"}</button>}
+        {step < 3 ? <button disabled={busy || (step === 2 && !f.logoKey)} onClick={() => setStep(step + 1)} className="gm-btn-primary">Continue</button>
+        : <button disabled={busy || !f.accept || !f.logoKey} onClick={submit} className="gm-btn-gold">{busy ? "Submitting" : "Submit"}</button>}
       </div>
     </div>
   );
