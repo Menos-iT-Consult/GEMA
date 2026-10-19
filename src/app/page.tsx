@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -59,9 +60,12 @@ export default function DirectoryPage() {
             <h1 className="font-serif text-3xl font-bold text-navy-950">Ministry Directory</h1>
             <p className="mt-1 text-sm text-slate-600">{loading ? "Searching…" : `${total} verified`}</p>
           </div>
-          <div className="flex rounded-xl border bg-white p-1">
-            <button onClick={() => setView("grid")} className={`rounded-lg p-2 ${view === "grid" ? "bg-navy-950 text-white" : "text-slate-500"}`} aria-label="Grid"><LayoutGrid className="h-4 w-4" /></button>
-            <button onClick={() => setView("list")} className={`rounded-lg p-2 ${view === "list" ? "bg-navy-950 text-white" : "text-slate-500"}`} aria-label="List"><List className="h-4 w-4" /></button>
+          <div className="flex items-center gap-3">
+            <Link href="/register" className="gm-btn-primary">Join Us</Link>
+            <div className="flex rounded-xl border bg-white p-1">
+              <button onClick={() => setView("grid")} className={`rounded-lg p-2 ${view === "grid" ? "bg-navy-950 text-white" : "text-slate-500"}`} aria-label="Grid"><LayoutGrid className="h-4 w-4" /></button>
+              <button onClick={() => setView("list")} className={`rounded-lg p-2 ${view === "list" ? "bg-navy-950 text-white" : "text-slate-500"}`} aria-label="List"><List className="h-4 w-4" /></button>
+            </div>
           </div>
         </div>
         <div className="gm-card mt-5 p-4">

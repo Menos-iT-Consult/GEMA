@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Church, Menu, X } from "lucide-react";
 
 const links = [
-  { href: "/", label: "Directory" },
   { href: "/register", label: "Join Us" },
 ];
 
