@@ -1,19 +1,45 @@
+"use client";
+
+import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+
+const SOCIALS = [
+  {
+    name: "WhatsApp",
+    href: "https://wa.me/+233246391921",
+    hover: "hover:bg-[#25D366] hover:text-white",
+    d: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z",
+  },
+  {
+    name: "X",
+    href: "https://www.x.com/gemaghana",
+    hover: "hover:bg-white hover:text-navy-950",
+    d: "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/gemaghana",
+    hover: "hover:bg-[#E4405F] hover:text-white",
+    d: "M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/gemaghana",
+    hover: "hover:bg-[#FF0000] hover:text-white",
+    d: "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z",
+  },
+  {
+    name: "Facebook",
+    href: "https://www.facebook.com/gemaghana",
+    hover: "hover:bg-[#1877F2] hover:text-white",
+    d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z",
+  },
+];
+
 export default function Footer() {
   return (
-    <footer
-      className="mt-16 bg-navy-950 text-slate-300 overflow-hidden"
-      style={{
-        backgroundImage:
-          'radial-gradient(circle at 50% 50%, rgba(34, 54, 104, 0.8), rgba(8, 8, 31, 0.9)), repeating-conic-gradient(from 45deg, #F47728 0deg 15deg, #C25A15 15deg 30deg, #106F5F 30deg 45deg, #4C66AF 45deg 60deg, #31457F 60deg 75deg, transparent 75deg 90deg), repeating-radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.06) 2px, transparent 2px, transparent 5px), linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%)',
-        backgroundSize:
-          '100% 100%, 300px 300px, 150px 150px, 20px 20px, 20px 20px',
-        backgroundBlendMode:
-          'overlay, screen, overlay, normal, normal',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2">
-        <div className="md:col-span-2">
+    <footer className="mt-16 border-t-4 border-ochre-500 bg-navy-950 text-slate-300">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="lg:col-span-2">
           <p className="font-serif text-xl font-bold text-white">Ghana Evangelical Missions Association</p>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-300">
             Centralized directory and verification portal for evangelical churches, mission
@@ -22,141 +48,96 @@ export default function Footer() {
           <p className="mt-4 text-xs uppercase tracking-widest text-ochre-300">
             Soli Deo Gloria • To Ghana and Beyond
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {SOCIALS.map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.name}
+                className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-slate-300 transition duration-200 hover:scale-110 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ochre-400 ${s.hover}`}
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]" aria-hidden="true">
+                  <path d={s.d} />
+                </svg>
+              </a>
+            ))}
+          </div>
         </div>
+
         <div>
           <p className="text-sm font-bold uppercase tracking-wider text-white">Explore</p>
-          <ul className="mt-3 space-y-2 text-sm text-slate-300">
-            <li><a className="hover:text-white" href="/">Directory</a></li>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>
+              <a
+                href="/"
+                className="group inline-flex items-center gap-1.5 transition hover:text-white"
+              >
+                <span className="border-b border-transparent transition group-hover:border-ochre-400">Directory</span>
+                <ArrowUpRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            </li>
+            <li>
+              <a
+                href="/register"
+                className="group inline-flex items-center gap-1.5 transition hover:text-white"
+              >
+                <span className="border-b border-transparent transition group-hover:border-ochre-400">Register Your Ministry</span>
+                <ArrowUpRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            </li>
           </ul>
         </div>
+
         <div>
           <p className="text-sm font-bold uppercase tracking-wider text-white">Contact</p>
-          <ul className="mt-3 space-y-2 text-sm text-slate-300">
-            <li>Accra, Greater Accra — Ghana</li>
-            <li>info@ghanamissions.org</li>
-            <li>+233 30 000 0000</li>
-          </ul>
-          <ul className="mt-4 space-y-2 text-sm">
+          <ul className="mt-3 space-y-2.5 text-sm">
             <li>
               <a
-                href="https://wa.me/+233246391921"
+                href="https://maps.google.com/?q=Accra,+Ghana"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-green-400 transition"
+                className="inline-flex items-start gap-2 transition hover:text-white"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 014 4v7a4 4 0 01-4 4M5 7a4 4 0 01-4-4V4a4 4 0 014-4m6 7l5 5m0 0l-5 5m5-5v7a2 2 0 01-2 2H5a2 2 0 01-2-2V4a2 2 0 012-2h7a2 2 0 012 2z"
-                  />
-                </svg>
-                WhatsApp
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ochre-300" />
+                Accra, Greater Accra — Ghana
               </a>
             </li>
             <li>
               <a
-                href="http://www.instagram.com/gemaghana"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-pink-300 transition"
+                href="mailto:info@ghanamissions.org"
+                className="inline-flex items-center gap-2 transition hover:text-white"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 3h5l-4 10-4-10h5V3zm0 0l4 10-4 10H5a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10z"
-                  />
-                </svg>
-                Instagram
+                <Mail className="h-4 w-4 shrink-0 text-ochre-300" />
+                info@ghanamissions.org
               </a>
             </li>
             <li>
               <a
-                href="http://www.x.com/gemaghana"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-slate-300 transition"
+                href="tel:+233300000000"
+                className="inline-flex items-center gap-2 transition hover:text-white"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14.752 11.168l-3.197-2.069A1 1 0 0013.248 9h1.5a1 1 0 01.776.536l-1.74 5.332 3.866-1.1A1 1 0 0122 12h-1.172m-4.205-1.068l-3.057 7h-4.788l-3.057-7H5.71a2 2 0 01-1.986-1.823l-1.459-4H2.5a2 2 0 01-1.987-1.273l-1.459 4H.28a2 2 0 01-1.986-1.823l-1.46-4A2 2 0 001.274 3H5v7h3.683l1.197-3.075a1 1 0 01.535-.29l3.381 1.6a1 1 0 01.569.36l-1.767 5.327z"
-                  />
-                </svg>
-                X
-              </a>
-            </li>
-            <li>
-              <a
-                href="http://www.youtube.com/gemaghana"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-red-400 transition"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2M20 19l-2 2m-4.588-5.412L16 12l-1.588 1.412M7 7l-2 2m-6.588 5.412L4 12l1.588 1.412M7 17l2 2m6.588-5.412L8 12l1.588-1.412"
-                  />
-                </svg>
-                YouTube
-              </a>
-            </li>
-            <li>
-              <a
-                href="http://www.facebook.com/gemaghana"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-blue-300 transition"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 13a4 4 0 014-4H7m15 0a4 4 0 014 4v3m-4-4l-4 4m0 0l-4-4m4 4V7a1 1 0 012 0v6m0 0a4 4 0 11-8 0M3 8a5 5 0 015-5h5a5 5 0 015 5 5 5 0 01-5 5H3z"
-                  />
-                </svg>
-                Facebook
+                <Phone className="h-4 w-4 shrink-0 text-ochre-300" />
+                +233 30 000 0000
               </a>
             </li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} Ghana Evangelical Missions Association. All rights reserved.
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-4 text-xs text-slate-400 sm:flex-row sm:px-6">
+          <p>© {new Date().getFullYear()} Ghana Evangelical Missions Association. All rights reserved.</p>
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 transition hover:border-ochre-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ochre-400"
+          >
+            Back to top
+            <ArrowUp className="h-3.5 w-3.5 transition group-hover:-translate-y-0.5" />
+          </button>
+        </div>
       </div>
     </footer>
   );
