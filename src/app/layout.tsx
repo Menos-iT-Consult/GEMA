@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ghana Missions | Evangelical Association Directory",
+  title: "Ghana Evangelical Missions Association | Ministry Directory",
   description:
     "Centralized directory, verification portal and admin dashboard for evangelical churches, missions and ministries across Ghana."
 };

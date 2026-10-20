@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="mt-16 bg-navy-950 text-slate-300">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2">
         <div className="md:col-span-2">
-          <p className="font-serif text-xl font-bold text-white">Ghana Missions</p>
+          <p className="font-serif text-xl font-bold text-white">Ghana Evangelical Missions Association</p>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-300">
             Centralized directory and verification portal for evangelical churches, mission
             agencies and ministries across the 16 regions of Ghana.
@@ -28,7 +28,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} Ghana Missions Evangelical Association. All rights reserved.
+        © {new Date().getFullYear()} Ghana Evangelical Missions Association. All rights reserved.
       </div>
     </footer>
   );

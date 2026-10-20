@@ -3,8 +3,17 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUID } from "crypto";
 
 function r2Endpoint(): string {
-  if (process.env.R2_ENDPOINT) return process.env.R2_ENDPOINT;
   const account = process.env.R2_ACCOUNT_ID;
+  const explicit = process.env.R2_ENDPOINT;
+  if (explicit) {
+    try {
+      const u = new URL(explicit);
+      if (u.hostname.includes(".")) return explicit.replace(/\/$/, "");
+    } catch {
+      // fall through to account-id derivation
+    }
+    if (!account) throw new Error("R2_ENDPOINT is not a valid URL and R2_ACCOUNT_ID is not set");
+  }
   if (!account) throw new Error("R2_ACCOUNT_ID or R2_ENDPOINT must be set");
   return `https://${account}.r2.cloudflarestorage.com`;
 }
@@ -48,7 +57,9 @@ export async function createPresignedUploadUrl(params: {
 }): Promise<{ uploadUrl: string; r2Key: string; publicUrl: string | null }> {
   const allowed = CONTENT_TYPES[params.kind];
   if (!allowed.includes(params.contentType)) {
-    throw new Error(`contentType ${params.contentType} not allowed for ${params.kind}`);
+    throw new Error(
+      `contentType "${params.contentType}" is not allowed for ${params.kind}; allowed: ${allowed.join(", ")}`
+    );
   }
   const key = buildR2Key(params.kind, params.fileName);
   const cmd = new PutObjectCommand({

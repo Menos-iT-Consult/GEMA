@@ -1,4 +1,4 @@
-# Ghana Missions — Evangelical Association Directory & Admin
+# Ghana Evangelical Missions Association (GEMA) — Directory & Admin
 
 Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2.
 
@@ -17,3 +17,4 @@ Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2
 
 ## Env
 See `.env.example`. R2 uses S3-compatible presigned PUT URLs (`logos/`, `banners/`, `legal-docs/`, `receipts/`).
+When deploying to Vercel, set every variable from `.env.example` in Project → Settings → Environment Variables (`DATABASE_URL`, `JWT_SECRET`, `R2_*`, `NEXT_PUBLIC_*`) — `/api/uploads/presign` returns 500 with a config hint until the `R2_*` vars exist.

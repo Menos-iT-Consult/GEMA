@@ -10,9 +10,9 @@ export default function Navbar() {
             <Church className="h-5 w-5" />
           </span>
           <span className="leading-tight">
-            <span className="block font-serif text-lg font-bold text-navy-950">Ghana Missions</span>
+            <span className="block font-serif text-lg font-bold text-navy-950">Ghana Evangelical</span>
             <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-ochre-600">
-              Evangelical Association
+              Missions Association
             </span>
           </span>
         </Link>
