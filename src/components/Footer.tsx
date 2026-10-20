@@ -4,7 +4,7 @@ export default function Footer() {
       className="mt-16 bg-navy-950 text-slate-300 overflow-hidden"
       style={{
         backgroundImage:
-          'radial-gradient(circle at 50% 50%, rgba(35, 45, 105, 0.8), rgba(10, 15, 60, 0.9)), repeating-conic-gradient(from 45deg, #ec4899 0deg 15deg, #f59e0b 15deg 30deg, #10b981 30deg 45deg, #3b82f6 45deg 60deg, #8b5cf6 60deg 75deg, transparent 75deg 90deg), repeating-radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.06) 2px, transparent 2px, transparent 5px), linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%)',
+          'radial-gradient(circle at 50% 50%, rgba(34, 54, 104, 0.8), rgba(8, 8, 31, 0.9)), repeating-conic-gradient(from 45deg, #F47728 0deg 15deg, #C25A15 15deg 30deg, #106F5F 30deg 45deg, #4C66AF 45deg 60deg, #31457F 60deg 75deg, transparent 75deg 90deg), repeating-radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.06) 2px, transparent 2px, transparent 5px), linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0.03) 52%, transparent 52%)',
         backgroundSize:
           '100% 100%, 300px 300px, 150px 150px, 20px 20px, 20px 20px',
         backgroundBlendMode:
