@@ -51,8 +51,8 @@ export default function Footer() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    strokeLineCap="round"
-                    strokeLineJoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth={2}
                     d="M16 7a4 4 0 014 4v7a4 4 0 01-4 4M5 7a4 4 0 01-4-4V4a4 4 0 014-4m6 7l5 5m0 0l-5 5m5-5v7a2 2 0 01-2 2H5a2 2 0 01-2-2V4a2 2 0 012-2h7a2 2 0 012 2z"
                   />
@@ -74,8 +74,8 @@ export default function Footer() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    strokeLineCap="round"
-                    strokeLineJoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth={2}
                     d="M17 3h5l-4 10-4-10h5V3zm0 0l4 10-4 10H5a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10z"
                   />
@@ -97,8 +97,8 @@ export default function Footer() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    strokeLineCap="round"
-                    strokeLineJoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth={2}
                     d="M14.752 11.168l-3.197-2.069A1 1 0 0013.248 9h1.5a1 1 0 01.776.536l-1.74 5.332 3.866-1.1A1 1 0 0122 12h-1.172m-4.205-1.068l-3.057 7h-4.788l-3.057-7H5.71a2 2 0 01-1.986-1.823l-1.459-4H2.5a2 2 0 01-1.987-1.273l-1.459 4H.28a2 2 0 01-1.986-1.823l-1.46-4A2 2 0 001.274 3H5v7h3.683l1.197-3.075a1 1 0 01.535-.29l3.381 1.6a1 1 0 01.569.36l-1.767 5.327z"
                   />
@@ -120,8 +120,8 @@ export default function Footer() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    strokeLineCap="round"
-                    strokeLineJoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth={2}
                     d="M20 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2M20 19l-2 2m-4.588-5.412L16 12l-1.588 1.412M7 7l-2 2m-6.588 5.412L4 12l1.588 1.412M7 17l2 2m6.588-5.412L8 12l1.588-1.412"
                   />
@@ -143,8 +143,8 @@ export default function Footer() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    strokeLineCap="round"
-                    strokeLineJoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth={2}
                     d="M3 13a4 4 0 014-4H7m15 0a4 4 0 014 4v3m-4-4l-4 4m0 0l-4-4m4 4V7a1 1 0 012 0v6m0 0a4 4 0 11-8 0M3 8a5 5 0 015-5h5a5 5 0 015 5 5 5 0 01-5 5H3z"
                   />
