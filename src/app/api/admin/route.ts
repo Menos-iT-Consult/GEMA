@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { organizations, duesRecords, users } from "@/lib/db/schema";
-import { readSession } from "@/lib/auth";
+import { readSession, hashPassword, normalizeEmail } from "@/lib/auth";
 import {
   updateStatusSchema,
   createDuesSchema,
   updateDuesSchema,
-  updateUserSchema
+  updateUserSchema,
+  createOrgSchema
 } from "@/lib/validators";
 import { eq, sql, and, inArray, desc, gte, type SQL } from "drizzle-orm";
+import { slugify } from "@/lib/utils";
 
 async function assertAdmin() {
   const s = await readSession();
@@ -196,7 +198,10 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   const session = await assertAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
 
   // Update a dues record (mark paid / pending / overdue)
   if ("duesId" in body) {
@@ -268,7 +273,118 @@ export async function PATCH(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await assertAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  // Create an organisation directly from the dashboard.
+  if ("name" in body && "email" in body) {
+    const parsed = createOrgSchema.safeParse(body);
+    if (!parsed.success) {
+      const detail = parsed.error.issues
+        .map((i) => `${i.path.join(".") || "body"}: ${i.message}`)
+        .join("; ");
+      return NextResponse.json({ error: `Invalid organisation — ${detail}` }, { status: 400 });
+    }
+    const d = parsed.data;
+
+    // Regional overseers may only add organisations inside their own region.
+    if (session.role === "REGIONAL_OVERSEER" && session.assignedRegion) {
+      if (d.region !== session.assignedRegion) {
+        return NextResponse.json(
+          { error: "You can only add organisations in your assigned region" },
+          { status: 403 }
+        );
+      }
+      // A regional overseer cannot self-approve — the new entry enters the queue.
+      if (d.status === "APPROVED") {
+        return NextResponse.json(
+          { error: "Regional overseers cannot add approved organisations directly" },
+          { status: 403 }
+        );
+      }
+    }
+
+    // Slug: use the supplied one, otherwise derive it from the name.
+    let slug = d.slug?.trim() || slugify(d.name);
+    if (!slug) {
+      return NextResponse.json({ error: "Could not derive a slug from the name" }, { status: 400 });
+    }
+    // Guarantee uniqueness by appending a short suffix when taken.
+    const clash = await db
+      .select({ id: organizations.id })
+      .from(organizations)
+      .where(eq(organizations.slug, slug))
+      .limit(1);
+    if (clash.length) {
+      slug = `${slug.slice(0, 90)}-${Date.now().toString(36).slice(-4)}`;
+    }
+
+    // Optional portal login for the new organisation.
+    if (d.adminUser) {
+      const adminEmail = normalizeEmail(d.adminUser.email);
+      const existingUser = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, adminEmail))
+        .limit(1);
+      if (existingUser.length) {
+        return NextResponse.json(
+          { error: "A user with that email already exists" },
+          { status: 409 }
+        );
+      }
+    }
+
+    const [row] = await db
+      .insert(organizations)
+      .values({
+        name: d.name,
+        slug,
+        denomination: d.denomination,
+        umbrellaBody: d.umbrellaBody as never,
+        registrationNumber: d.registrationNumber ?? null,
+        email: d.email,
+        phonePrimary: d.phonePrimary,
+        phoneSecondary: d.phoneSecondary ?? null,
+        website: d.website || null,
+        region: d.region as never,
+        cityTown: d.cityTown,
+        digitalAddress: d.digitalAddress ?? null,
+        physicalAddress: d.physicalAddress,
+        logoR2Key: d.logoR2Key ?? null,
+        bannerR2Key: d.bannerR2Key ?? null,
+        legalDocR2Key: d.legalDocR2Key ?? null,
+        status: d.status as never,
+        ministryFocus: d.ministryFocus ?? [],
+        socialLinks: d.socialLinks ?? {},
+        missionStatement: d.missionStatement ?? null,
+        leaderName: d.leaderName ?? null
+      })
+      .returning();
+
+    let createdUserId: string | null = null;
+    if (d.adminUser) {
+      const [u] = await db
+        .insert(users)
+        .values({
+          orgId: row.id,
+          fullName: d.adminUser.fullName,
+          email: normalizeEmail(d.adminUser.email),
+          passwordHash: await hashPassword(d.adminUser.password),
+          role: "ORG_ADMIN"
+        })
+        .returning({ id: users.id });
+      createdUserId = u?.id ?? null;
+    }
+
+    return NextResponse.json(
+      { organization: row, userId: createdUserId },
+      { status: 201 }
+    );
+  }
+
   const parsed = createDuesSchema.safeParse(body);
   if (!parsed.success)
     return NextResponse.json({ error: "Invalid dues record" }, { status: 400 });

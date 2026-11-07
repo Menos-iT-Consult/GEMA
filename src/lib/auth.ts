@@ -16,6 +16,10 @@ export type SessionPayload = {
   assignedRegion?: string | null;
 };
 
+export function normalizeEmail(value: string): string {
+  return value.trim().toLowerCase();
+}
+
 export async function hashPassword(plain: string): Promise<string> {
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(plain, salt);

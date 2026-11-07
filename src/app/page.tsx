@@ -57,7 +57,7 @@ export default function DirectoryPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-navy-950">Ministry Directory</h1>
+            <h1 className="font-serif text-3xl font-bold text-navy-950">Missions Directory</h1>
             <p className="mt-1 text-sm text-slate-600">{loading ? "Searching…" : `${total} verified`}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">

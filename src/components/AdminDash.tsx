@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Organization } from "@/lib/db/schema";
 import { ORG_STATUSES, GHANA_REGIONS } from "@/lib/constants";
+import AddOrgModal from "@/components/AddOrgModal";
 import {
   Search,
   RefreshCw,
@@ -118,6 +119,7 @@ export default function AdminDash() {
   const [oq, setOq] = useState("");
   const [ost, setOst] = useState("");
   const [oreg, setOreg] = useState("");
+  const [showAddOrg, setShowAddOrg] = useState(false);
   const [duesForm, setDuesForm] = useState({
     orgId: "",
     year: String(new Date().getFullYear()),
@@ -530,6 +532,12 @@ export default function AdminDash() {
               <button onClick={csv} className="gm-btn-ghost text-xs">
                 CSV
               </button>
+              <button
+                onClick={() => setShowAddOrg(true)}
+                className="gm-btn-gold !px-3 !py-2 text-xs"
+              >
+                <Plus className="h-3.5 w-3.5" /> Add Organization
+              </button>
             </div>
           </div>
           <div className="mt-4 overflow-x-auto">
@@ -787,6 +795,19 @@ export default function AdminDash() {
             </div>
           )}
         </div>
+      )}
+
+      {showAddOrg && (
+        <AddOrgModal
+          onClose={() => setShowAddOrg(false)}
+          onCreated={async (_slug, message) => {
+            setShowAddOrg(false);
+            setMsg(message);
+            await load();
+          }}
+          defaultRegion={d.me.assignedRegion}
+          allowStatusEdit={d.me.role === "SUPER_ADMIN"}
+        />
       )}
     </div>
   );

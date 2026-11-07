@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { verifyPassword, signSession, AUTH_COOKIE } from "@/lib/auth";
+import { verifyPassword, signSession, AUTH_COOKIE, normalizeEmail } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-const loginSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
+const loginSchema = z.object({
+  email: z.string().trim().email(),
+  password: z.string().min(1)
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,10 +24,25 @@ export async function POST(req: NextRequest) {
     const parsed = loginSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
 
-    const [user] = await db.select().from(users).where(eq(users.email, parsed.data.email)).limit(1);
+    // Emails are stored lower-cased (see the portal member creation route),
+    // and the schema above already trimmed + lower-cased the submitted address.
+    const normalizedEmail = normalizeEmail(parsed.data.email);
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, normalizedEmail))
+      .limit(1);
     if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     const ok = await verifyPassword(parsed.data.password, user.passwordHash);
     if (!ok) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+
+    // Deactivated accounts must not be able to sign in — otherwise
+    // "Deactivate" in the portal would not actually revoke access.
+    if (user.isActive === 0)
+      return NextResponse.json(
+        { error: "This account has been deactivated. Please contact your administrator." },
+        { status: 403 }
+      );
 
     const token = await signSession({
       sub: user.id,

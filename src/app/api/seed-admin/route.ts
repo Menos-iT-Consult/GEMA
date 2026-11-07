@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { hashPassword } from "@/lib/auth";
+import { hashPassword, normalizeEmail } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
@@ -12,19 +12,18 @@ export const dynamic = "force-dynamic";
  * Creates (or resets the password of) the seed SUPER_ADMIN account using the
  * ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD env vars set in Vercel.
  *
- * Requires the request to carry the admin password as a token, either:
- *   - header: x-seed-token: <ADMIN_SEED_PASSWORD>
- *   - query:  ?token=<ADMIN_SEED_PASSWORD>
+ * Requires the request to carry the admin password in the header:
+ *   - x-seed-token: <ADMIN_SEED_PASSWORD>
  *
- * Safe by design: without the correct token nothing happens; a successful call
- * only ever writes the credentials defined server-side in the env vars.
+ * Safe by design: without the correct token nothing happens; the secret is not
+ * echoed in query strings or URL paths.
  */
 async function handle(req: NextRequest) {
   try {
     if (!process.env.DATABASE_URL) {
       return NextResponse.json({ error: "DATABASE_URL is not set" }, { status: 500 });
     }
-    const email = process.env.ADMIN_SEED_EMAIL;
+    const email = normalizeEmail(process.env.ADMIN_SEED_EMAIL ?? "");
     const password = process.env.ADMIN_SEED_PASSWORD;
     if (!email || !password) {
       return NextResponse.json(
@@ -33,7 +32,7 @@ async function handle(req: NextRequest) {
       );
     }
 
-    const token = req.headers.get("x-seed-token") ?? new URL(req.url).searchParams.get("token");
+    const token = req.headers.get("x-seed-token");
     if (token !== password) {
       return NextResponse.json({ error: "Invalid seed token" }, { status: 403 });
     }
@@ -67,6 +66,6 @@ export async function POST(req: NextRequest) {
   return handle(req);
 }
 
-export async function GET(req: NextRequest) {
-  return handle(req);
+export async function GET() {
+  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 }

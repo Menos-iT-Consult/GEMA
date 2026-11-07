@@ -6,3 +6,10 @@ dist
 drizzle/*.sql
 *.log
 .DS_Store
+tsconfig.tsbuildinfo
+
+# Test harness artifacts
+browser-shots/
+*-out.txt
+browser-run.txt
+.browser-org-id.txt
