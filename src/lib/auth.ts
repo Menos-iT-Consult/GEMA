@@ -2,9 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 
-const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? "dev-secret-change-me-please-32chars"
-);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export const AUTH_COOKIE = "gm_session";
 

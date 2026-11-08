@@ -21,11 +21,11 @@ export default function OrgCard({
   const logo = logoUrl(org);
   const verified = org.status === "APPROVED";
   return (
-    <button
-      onClick={() => onSelect?.(org)}
+    <a
+      href={`/organization/${org.slug}`}
       className={cn(
-        "group rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-gema-300 hover:bg-gema-50",
-        layout === "grid" && "group-hover:shadow-lg"
+        "group block rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-gema-300 hover:bg-gema-50 cursor-pointer",
+        layout === "grid" && "group-hover:shadow-xl group-hover:scale-105"
       )}
     >
       {layout === "grid" ? (
@@ -85,6 +85,6 @@ export default function OrgCard({
           </div>
         </>
       )}
-    </button>
+    </a>
   );
 }

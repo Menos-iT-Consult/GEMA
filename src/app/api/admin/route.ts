@@ -196,7 +196,7 @@ export async function PATCH(req: NextRequest) {
 
   const [updated] = await db
     .update(organizations)
-    .set({ status: parsed.data.status as never, updatedAt: new Date() })
+    .set({ status: parsed.data.status as never, note: parsed.data.note, updatedAt: new Date() })
     .where(eq(organizations.id, parsed.data.id))
     .returning();
   return NextResponse.json({ organization: updated });

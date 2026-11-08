@@ -139,7 +139,7 @@ export default function DirectoryPage() {
           )}
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="mt-6 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             {error ? (
               <div role="alert" className="gm-card p-10 text-center">
@@ -156,9 +156,9 @@ export default function DirectoryPage() {
                 <p className="mt-2 text-sm text-slate-500">Try adjusting your search or filters.</p>
               </div>
             ) : (
-              <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2" : "grid gap-3"}>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((organization) => (
-                  <OrgCard key={organization.id} org={organization} layout={view} onSelect={setSelected} />
+                  <OrgCard key={organization.id} org={organization} layout="grid" onSelect={setSelected} />
                 ))}
               </div>
             )}

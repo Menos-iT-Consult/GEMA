@@ -92,7 +92,7 @@ export const createOrgSchema = z.object({
       youtube: z.string().optional()
     })
     .default({}),
-  status: z.enum(ORG_STATUSES as unknown as [string, ...string[]]).default("APPROVED"),
+  status: z.enum(ORG_STATUSES as unknown as [string, ...string[]]).default("PENDING_REVIEW"),
   // Optional portal login for the new organisation.
   adminUser: z
     .object({
@@ -114,7 +114,7 @@ export const updateStatusSchema = z.object({
 export const updateUserSchema = z
   .object({
     userId: z.string().uuid(),
-    isActive: z.union([z.literal(0), z.literal(1)]).optional(),
+    isActive: z.union([z.literal(0), z.literal(1), z.boolean()]).optional(),
     role: z.enum(["SUPER_ADMIN", "REGIONAL_OVERSEER", "ORG_ADMIN", "MEMBER_VIEWER"]).optional()
   })
   .refine((v) => v.isActive !== undefined || v.role !== undefined, {
@@ -176,7 +176,7 @@ export const portalMemberCreateSchema = z.object({
 export const portalMemberUpdateSchema = z
   .object({
     userId: z.string().uuid(),
-    isActive: z.union([z.literal(0), z.literal(1)]).optional(),
+    isActive: z.union([z.literal(0), z.literal(1), z.boolean()]).optional(),
     role: z.enum(PORTAL_MEMBER_ROLES).optional()
   })
   .refine((v) => v.isActive !== undefined || v.role !== undefined, {
