@@ -25,18 +25,18 @@ export default function OrgCard({
     <Link
       href={`/organization/${org.slug}`}
       className={cn(
-        "group block rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-gema-300 hover:bg-gema-50 cursor-pointer",
+        "group block rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-ochre-300 hover:bg-navy-50 cursor-pointer",
         layout === "grid" && "group-hover:shadow-xl group-hover:scale-105"
       )}
     >
       {layout === "grid" ? (
         <>
           {verified && (
-            <span className="absolute left-2 top-2 bg-gema-600 text-white rounded-sm text-xs font-semibold px-2 py-0.5">
+            <span className="absolute left-2 top-2 bg-ochre-400 text-navy-950 rounded-sm text-xs font-semibold px-2 py-0.5">
               <BadgeCheck className="h-3 w-3" /> Verified
             </span>
           )}
-          <div className="relative h-48 bg-gema-50 flex items-center justify-center">
+          <div className="relative h-48 bg-navy-50 flex items-center justify-center">
             {logo ? (
               <img
                 src={logo}
@@ -44,7 +44,7 @@ export default function OrgCard({
                 className="h-24 w-24 rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
-              <span className="h-24 w-24 rounded-lg bg-slate-200 flex items-center justify-center text-slate-400 text-2xl font-bold">
+              <span className="h-24 w-24 rounded-lg bg-navy-50 flex items-center justify-center text-slate-400 text-2xl font-bold">
                 {org.name.charAt(0)}
               </span>
             )}
@@ -66,9 +66,9 @@ export default function OrgCard({
                 src={logo}
                 alt={org.name}
                 className="h-16 w-16 rounded-lg mx-auto mb-3 object-cover"
-              />
+              )
             ) : (
-              <span className="h-16 w-16 rounded-lg bg-slate-200 mx-auto mb-3 text-slate-400 text-2xl font-bold">
+              <span className="h-16 w-16 rounded-lg bg-navy-50 mx-auto mb-3 text-slate-400 text-2xl font-bold">
                 {org.name.charAt(0)}
               </span>
             )}
@@ -79,12 +79,12 @@ export default function OrgCard({
               </p>
             )}
             {verified && (
-              <span className="mt-2 inline-flex items-center gap-1 rounded-sm px-2 py-0.5 bg-gema-600 text-white text-xs font-semibold">
+              <span className="mt-2 inline-flex items-center gap-1 rounded-sm px-2 py-0.5 bg-ochre-400 text-navy-950 text-xs font-semibold">
                 <BadgeCheck className="h-3 w-3" /> Verified
               </span>
             )}
           </div>
-        </>
+        </div>
       )}
     </Link>
   );

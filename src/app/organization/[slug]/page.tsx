@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import type { Organization } from "@/lib/db/schema";
+
+/* ===== BRAND COLORS from gemagh.org ===== */
+const NAVY = "rgb(10, 19, 55)";
+const OCHRE = "rgb(244, 119, 40)";
+const ROYAL = "rgb(30, 132, 115)";
 
 export default function OrganizationPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -38,19 +42,21 @@ export default function OrganizationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gema-50 text-navy-950 p-8">
-        <p className="text-slate-600">Loading organization…</p>
+      <div className={NAVY} color={NAVY} p-8>
+        <p className={NAVY} text-slate-600>Loading organization…</p>
       </div>
     );
   }
 
   if (!org) {
     return (
-      <div className="min-h-screen bg-gema-50 text-navy-950 p-8">
+      <div className={NAVY} color={NAVY} p-8>
         <div className="max-w-lg mx-auto">
-          <h1 className="text-3xl font-bold text-navy-950 mb-4">Organization</h1>
+          <h1 className="text-3xl font-bold text-{NAVY} mb-4">Organization</h1>
           <p className="text-slate-600">Organization not found</p>
-          <Link href="/directory" className="bg-ochre-600 text-white px-4 py-2 rounded mt-4">Back to Directory</Link>
+          <Link href="/directory" className={OCHRE} text={NAVY} px-4 py-2 rounded mt-4>
+            Back to Directory
+          </Link>
         </div>
       </div>
     );
@@ -62,13 +68,13 @@ export default function OrganizationPage() {
   const socialLinks = org.socialLinks ?? {};
 
   return (
-    <div className="min-h-screen bg-gema-50 text-navy-950">
+    <div className={NAVY}>
       <Navbar />
 
       <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl mb-8">
           {logoUrl && (
-            <div className="relative h-64 bg-gema-50 overflow-hidden mb-6">
+            <div className="relative h-64 bg-navy-50 overflow-hidden mb-6">
               <img
                 src={logoUrl}
                 alt={org.name}
@@ -78,21 +84,21 @@ export default function OrganizationPage() {
           )}
 
           <div>
-            <h1 className="text-4xl font-serif font-bold text-navy-950 mb-1">{org.name}</h1>
+            <h1 className="text-4xl font-serif font-bold text-{NAVY} mb-1">{org.name}</h1>
             <p className="text-slate-600 mb-4">{org.missionStatement || "No mission statement added."}</p>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Region</p>
-                <p className="text-lg text-navy-950">{org.region}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Region</p>
+                <p className="text-lg text-{NAVY}">{org.region}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Denomination</p>
-                <p className="text-lg text-navy-950">{org.denomination}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Denomination</p>
+                <p className="text-lg text-{NAVY}">{org.denomination}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Status</p>
-                <span className={`gm-badge ${org.status === "APPROVED" ? "bg-gema-100 text-gema-700" : "bg-royal-100 text-royal-700"}`}>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Status</p>
+                <span className="inline-flex items-center gap-1 rounded-sm px-2 py-0.5 bg-ochre-400 text-navy-950 text-xs font-semibold">
                   {org.status.replace(/_/g, " ")}
                 </span>
               </div>
@@ -100,27 +106,27 @@ export default function OrganizationPage() {
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Email</p>
-                <p className="text-navy-950">{org.email}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Email</p>
+                <p className="text-{NAVY}">{org.email}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Phone</p>
-                <p className="text-navy-950">{org.phonePrimary}{org.phoneSecondary ? ` / ${org.phoneSecondary}` : ""}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Phone</p>
+                <p className="text-{NAVY}">{org.phonePrimary}{org.phoneSecondary ? ` / ${org.phoneSecondary}` : ""}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Location</p>
-                <p className="text-navy-950">{org.cityTown}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Location</p>
+                <p className="text-{NAVY}">{org.cityTown}</p>
               </div>
             </div>
 
             {org.ministryFocus && org.ministryFocus.length > 0 && (
               <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Ministry Focus</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Ministry Focus</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {org.ministryFocus.map((focus) => (
                     <span
                       key={focus}
-                      className="rounded-full px-3 py-1.5 text-xs font-bold bg-gema-100 text-gema-700"
+                      className="rounded-full px-3 py-1.5 text-xs font-bold bg-ochre-400 text-navy-950"
                     >
                       {focus}
                     </span>
@@ -131,7 +137,7 @@ export default function OrganizationPage() {
 
             {Object.keys(socialLinks).length > 0 && (
               <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Social Links</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-{ROYAL}">Social Links</p>
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   {(["facebook", "instagram", "twitter", "youtube"] as const).map((key) => {
                     const url = socialLinks[key];
@@ -142,9 +148,8 @@ export default function OrganizationPage() {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 hover:bg-gema-50"
+                          className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 hover:bg-{OCHRE}50"
                         >
-                          {/* SVG icons would go here */}
                           <span>{key.replace(/\(/g, "").replace(/\)/g, "")}</span>
                         </a>
                       );
@@ -158,8 +163,8 @@ export default function OrganizationPage() {
         </div>
 
         <aside className="lg:col-span-2">
-          <div className="gm-card p-6">
-            <h3 className="text-xl font-bold text-navy-950 mb-4">Ministry Overview</h3>
+          <div className="rounded-xl border border-slate-200 bg-white p-6">
+            <h3 className="text-xl font-bold text-{NAVY} mb-4">Ministry Overview</h3>
             <p className="text-slate-600 mb-4">
               {org.registrationNumber ? `Registration: ${org.registrationNumber}` : "No registration number on file"}
             </p>
@@ -171,12 +176,12 @@ export default function OrganizationPage() {
             </p>
           </div>
 
-          <div className="gm-card p-6 mt-6">
-            <h3 className="text-xl font-bold text-navy-950 mb-4">Connect</h3>
+          <div className="rounded-xl border border-slate-200 bg-white p-6 mt-6">
+            <h3 className="text-xl font-bold text-{NAVY} mb-4">Connect</h3>
             <div className="space-y-3 text-slate-600">
               <a
                 href={`mailto:${org.email}`}
-                className="flex items-center gap-2 hover:text-gema-600 transition"
+                className="flex items-center gap-2 hover:text-{OCHRE}50 transition"
               >
                 <span className="text-lg">Email</span>
               </a>
@@ -185,7 +190,7 @@ export default function OrganizationPage() {
                   href={org.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-gema-600 transition"
+                  className="flex items-center gap-2 hover:text-{OCHRE}50 transition"
                 >
                   <span className="text-lg">Website</span>
                 </a>
@@ -193,7 +198,7 @@ export default function OrganizationPage() {
               {org.phonePrimary && (
                 <a
                   href={`tel:${org.phonePrimary}`}
-                  className="flex items-center gap-2 hover:text-gema-600 transition"
+                  className="flex items-center gap-2 hover:text-{OCHRE}50 transition"
                 >
                   <span className="text-lg">Call</span>
                 </a>
@@ -202,8 +207,6 @@ export default function OrganizationPage() {
           </div>
         </aside>
       </main>
-
-      <Footer />
     </div>
   );
 }
