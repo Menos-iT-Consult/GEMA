@@ -38,14 +38,6 @@ const SOCIALS = [
 const NAVY = "rgb(10, 19, 55)";
 const OCHRE = "rgb(244, 119, 40)";
 
-const SOCIAL_COLORS = {
-  WhatsApp: "hover:bg-[#25D366] hover:text-white",
-  X: "hover:bg-white hover:text-navy-950",
-  Instagram: "hover:bg-[#E4405F] hover:text-white",
-  YouTube: "hover:bg-[#FF0000] hover:text-white",
-  Facebook: "hover:bg-[#1877F2] hover:text-white",
-};
-
 export default function Footer() {
   return (
     <footer className="mt-16 border-t-4 border-ochre-500 bg-navy-950 text-slate-300">
@@ -67,7 +59,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name}
-                className={`flex h-10 w-10 items-center justify-center rounded-full bg-navy-950/10 text-slate-300 transition duration-200 hover:scale-110 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ochre-400 ${SOCIAL_COLORS[s.name]}`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full bg-navy-950/10 text-slate-300 transition duration-200 hover:scale-110 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ochre-400 ${s.hover}`}
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]" aria-hidden="true">
                   <path d={s.d} />

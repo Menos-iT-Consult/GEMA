@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -103,12 +105,12 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className={bg(NAVY)} color={text(NAVY)} p-8>
+      <div className="min-h-screen p-8" style={{ backgroundColor: NAVY }}>
         <div className="max-w-lg mx-auto">
           <div className="grid gap-4 sm:grid-cols-3">
-            {[1, 2, 3].map((_) => (
-              <div className={`${bg(NAVY)} border border-slate-200/80 p-6 shadow-lg`}>
-                <div className={text(NAVY)} className="text-4xl font-bold font-serif animate-spin" />
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="border border-slate-200/80 p-6 shadow-lg">
+                <div className="text-4xl font-bold font-serif animate-spin" />
                 <div className="mt-2 text-sm text-slate-600">Loading...</div>
               </div>
             ))}
@@ -123,7 +125,7 @@ export default function HomePage() {
       <Navbar />
 
       <main className={bg(NAVY)}>
-        <div className={bg(NAVY)} absolute inset-x-0 top-0 h-[520px] />
+        <div className="absolute inset-x-0 top-0 h-[520px]" style={{ backgroundColor: NAVY }} />
 
         <section className="relative mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr]">
@@ -143,10 +145,10 @@ export default function HomePage() {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link href="/register" className={bg(OCHRE)} text-{NAVY} px-5 py-3 rounded-xl font-medium transition hover:bg-{OCHRE}500">
+                <Link href="/register" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-medium text-white transition hover:opacity-90" style={{ backgroundColor: OCHRE }}>
                   Join Us <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/directory" className={border(ROYAL)} text-{ROYAL} px-5 py-3 rounded-xl font-medium transition:hover:bg-{ROYAL}50 hover:text-{ROYAL}900">
+                <Link href="/directory" className="rounded-xl border px-5 py-3 font-medium transition hover:bg-slate-50" style={{ borderColor: ROYAL, color: ROYAL }}>
                   Explore Directory
                 </Link>
               </div>
@@ -183,12 +185,14 @@ export default function HomePage() {
                     </div>
                     <div className="mt-4 space-y-3">
                       {regionalSpotlight.map((item) => (
-                        <div key={item.region} className="flex items-center justify-between text-[11px] text-slate-700">
-                          <span>{item.region}</span>
-                          <span>{item.ministries}</span>
-                        </div>
-                        <div className="h-2 rounded-full bg-white">
-                          <div className="h-2 rounded-full bg-{OCHRE}" style={{ width: `${item.ministries / 4}%` }} />
+                        <div key={item.region}>
+                          <div className="flex items-center justify-between text-[11px] text-slate-700">
+                            <span>{item.region}</span>
+                            <span>{item.ministries}</span>
+                          </div>
+                          <div className="h-2 rounded-full bg-slate-100">
+                            <div className="h-2 rounded-full" style={{ width: `${item.ministries / 4}%`, backgroundColor: OCHRE }} />
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -281,10 +285,10 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-                <Link href="/register" className={bg(OCHRE)} text-{NAVY} px-5 py-3 rounded-xl font-medium transition hover:bg-{OCHRE}500">
+                <Link href="/register" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-medium text-white transition hover:opacity-90" style={{ backgroundColor: OCHRE }}>
                   Join Us <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/admin/login" className={border("white")} bg-white/10 text-{NAVY} px-5 py-3 rounded-xl border border-white/20 text-sm font-medium text-{NAVY} transition hover:bg-white/15">
+                <Link href="/admin/login" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/15">
                   Admin Login
                 </Link>
               </div>
@@ -292,8 +296,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
-
-    <Footer />
   );
 }

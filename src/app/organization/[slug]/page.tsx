@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -42,19 +43,23 @@ export default function OrganizationPage() {
 
   if (loading) {
     return (
-      <div className={NAVY} color={NAVY} p-8>
-        <p className={NAVY} text-slate-600>Loading organization…</p>
+      <div className="min-h-screen p-8 text-navy-950" style={{ backgroundColor: NAVY }}>
+        <p className="text-slate-600">Loading organization…</p>
       </div>
     );
   }
 
   if (!org) {
     return (
-      <div className={NAVY} color={NAVY} p-8>
+      <div className="min-h-screen p-8 text-navy-950" style={{ backgroundColor: NAVY }}>
         <div className="max-w-lg mx-auto">
           <h1 className="text-3xl font-bold text-{NAVY} mb-4">Organization</h1>
           <p className="text-slate-600">Organization not found</p>
-          <Link href="/directory" className={OCHRE} text={NAVY} px-4 py-2 rounded mt-4>
+          <Link
+            href="/directory"
+            className="mt-4 inline-block rounded px-4 py-2 text-white"
+            style={{ backgroundColor: OCHRE }}
+          >
             Back to Directory
           </Link>
         </div>
@@ -68,7 +73,7 @@ export default function OrganizationPage() {
   const socialLinks = org.socialLinks ?? {};
 
   return (
-    <div className={NAVY}>
+    <div className="min-h-screen bg-gema-50 text-navy-950">
       <Navbar />
 
       <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">

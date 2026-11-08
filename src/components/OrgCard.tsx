@@ -66,7 +66,7 @@ export default function OrgCard({
                 src={logo}
                 alt={org.name}
                 className="h-16 w-16 rounded-lg mx-auto mb-3 object-cover"
-              )
+              />
             ) : (
               <span className="h-16 w-16 rounded-lg bg-navy-50 mx-auto mb-3 text-slate-400 text-2xl font-bold">
                 {org.name.charAt(0)}
@@ -84,7 +84,7 @@ export default function OrgCard({
               </span>
             )}
           </div>
-        </div>
+        </>
       )}
     </Link>
   );
