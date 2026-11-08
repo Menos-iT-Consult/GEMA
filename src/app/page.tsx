@@ -56,20 +56,20 @@ export default function HomePage() {
     <>
       <Navbar />
 
-      <main className="relative overflow-hidden bg-navy-950">
-        <div className="absolute inset-x-0 top-0 h-[520px] bg-navy-950/80" />
+      <main className="relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-[520px] bg-navy-950" />
 
         <section className="relative mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr]">
 
             <div className="fade-up">
-              <div className="inline-flex items-center gap-2 rounded-full border border-royal-200 bg-white/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-royal-700 shadow-sm backdrop-blur">
+              <div className="inline-flex items-center gap-2 rounded-full border border-royal-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-royal-700 shadow-sm backdrop-blur">
                 <Sparkles className="h-3.5 w-3.5" />
                 Ghana Evangelical Missions Association
               </div>
 
               <h1 className="mt-6 max-w-xl font-serif text-4xl font-bold leading-tight text-navy-950 sm:text-5xl lg:text-6xl">
-                A stronger Gospel network for <span className="bg-gradient-to-r from-royal-600 via-gema-700 to-ochre-500 bg-clip-text text-transparent">Ghana</span>
+                A stronger Gospel network for <span className="font-medium text-gema-600">Ghana</span>
               </h1>
 
               <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
@@ -92,37 +92,39 @@ export default function HomePage() {
             </div>
 
             <div className="relative">
-              <div className="hero-panel float-slow relative overflow-hidden rounded-3xl border border-slate-200 bg-white/85 p-4 shadow-2xl backdrop-blur-sm">
+              <div className="hero-panel float-slow relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl backdrop-blur-sm">
                 <div className="rounded-2xl bg-navy-950 via-royal-700 to-gema-700 p-5 text-white shadow-xl">
                   <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-white/70">
                     <span>Network Snapshot</span>
-                    <span className="rounded-full bg-white/10 px-2 py-1">Live</span>
+                    <span className="rounded-full bg-white px-2 py-1">Live</span>
                   </div>
 
                   <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white/10 p-4">
+                    <div className="rounded-2xl bg-white p-4">
                       <div className="text-3xl font-bold">250+</div>
-                      <div className="mt-1 text-sm text-white/75">Verified members</div>
+                      <div className="mt-1 text-sm text-gray-700">Verified members</div>
                     </div>
                     <div className="rounded-2xl bg-ochre-500/20 p-4 ring-1 ring-ochre-300/40">
                       <div className="text-3xl font-bold">24</div>
-                      <div className="mt-1 text-sm text-white/75">Partnerships</div>
+                      <div className="mt-1 text-sm text-gray-700">Partnerships</div>
                     </div>
                   </div>
 
-                  <div className="mt-6 rounded-2xl bg-white/10 p-4">
-                    <div className="flex items-center justify-between text-sm text-white/80">
+                  <div className="mt-6 rounded-2xl bg-white p-4">
+                    <div className="flex items-center justify-between text-sm text-gray-700">
                       <span>Regional coverage</span>
                       <span>16 regions</span>
                     </div>
                     <div className="mt-4 space-y-3">
                       {regionalSpotlight.map((item) => (
-                        <div key={item.region} className="flex items-center justify-between text-[11px] text-white/70">
-                          <span>{item.region}</span>
-                          <span>{item.ministries}</span>
-                        </div>
-                        <div className="h-2 rounded-full bg-white/10">
-                          <div className="h-2 rounded-full bg-gray-600" style={{ width: `${item.ministries / 4}%` }} />
+                        <div key={item.region}>
+                          <div className="flex items-center justify-between text-[11px] text-gray-700">
+                            <span>{item.region}</span>
+                            <span>{item.ministries}</span>
+                          </div>
+                          <div className="h-2 rounded-full bg-white">
+                            <div className="h-2 rounded-full bg-gray-600" style={{ width: `${item.ministries / 4}%` }} />
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -133,8 +135,8 @@ export default function HomePage() {
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-50 text-navy-700"><Building2 className="h-5 w-5" /></div>
                     <div>
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Mission Lead</div>
-                      <div className="font-semibold text-slate-800">Church & Agency Network</div>
+                      <div className="text-xs uppercase tracking-[0.18em] text-gray-500">Mission Lead</div>
+                      <div className="font-semibold text-gray-800">Church & Agency Network</div>
                     </div>
                   </div>
                 </div>
@@ -146,7 +148,7 @@ export default function HomePage() {
         <section className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
           <div className="grid gap-6 lg:grid-cols-3">
             {stats.map((stat) => (
-              <div key={stat.label} className="rounded-3xl border border-slate-200 bg-white/85 p-6 shadow-sm backdrop-blur-sm">
+              <div key={stat.label} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
                 <div className="text-5xl font-bold font-serif text-navy-950">{stat.value}</div>
                 <div className="mt-2 text-sm font-medium text-slate-600">{stat.label}</div>
               </div>
@@ -220,8 +222,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
-
-    <Footer />
   );
 }
