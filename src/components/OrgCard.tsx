@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { BadgeCheck, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Organization } from "@/lib/db/schema";
@@ -21,7 +22,7 @@ export default function OrgCard({
   const logo = logoUrl(org);
   const verified = org.status === "APPROVED";
   return (
-    <a
+    <Link
       href={`/organization/${org.slug}`}
       className={cn(
         "group block rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-gema-300 hover:bg-gema-50 cursor-pointer",
@@ -85,6 +86,6 @@ export default function OrgCard({
           </div>
         </>
       )}
-    </a>
+    </Link>
   );
 }

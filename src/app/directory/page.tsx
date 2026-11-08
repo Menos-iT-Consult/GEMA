@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import OrgCard from "@/components/OrgCard";
-import ProfileModal from "@/components/ProfileModal";
 import RegionHub from "@/components/RegionHub";
 import {
   DENOMINATIONS,
@@ -26,8 +25,6 @@ export default function DirectoryPage() {
   const [denom, setDenom] = useState("");
   const [umbrella, setUmbrella] = useState("");
   const [focus, setFocus] = useState("");
-  const [view, setView] = useState<"grid" | "list">("grid");
-  const [selected, setSelected] = useState<Organization | null>(null);
 
   const query = useMemo(() => {
     const params = new URLSearchParams({ status: "APPROVED", pageSize: "48" });
@@ -158,7 +155,7 @@ export default function DirectoryPage() {
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((organization) => (
-                  <OrgCard key={organization.id} org={organization} layout="grid" onSelect={setSelected} />
+                  <OrgCard key={organization.id} org={organization} layout="grid" />
                 ))}
               </div>
             )}
@@ -168,7 +165,6 @@ export default function DirectoryPage() {
           </aside>
         </div>
       </main>
-      <ProfileModal org={selected} onClose={() => setSelected(null)} />
       <Footer />
     </>
   );
