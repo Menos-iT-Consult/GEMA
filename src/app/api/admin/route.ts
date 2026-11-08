@@ -166,7 +166,7 @@ export async function PATCH(req: NextRequest) {
     const [updated] = await db
       .update(users)
       .set({
-        ...(parsed.data.isActive !== undefined ? { isActive: parsed.data.isActive } : {}),
+        ...(parsed.data.isActive !== undefined ? { isActive: typeof parsed.data.isActive === "boolean" ? (parsed.data.isActive ? 1 : 0) : parsed.data.isActive } : {}),
         ...(parsed.data.role !== undefined ? { role: parsed.data.role as never } : {})
       })
       .where(eq(users.id, parsed.data.userId))
@@ -196,7 +196,7 @@ export async function PATCH(req: NextRequest) {
 
   const [updated] = await db
     .update(organizations)
-    .set({ status: parsed.data.status as never, note: parsed.data.note, updatedAt: new Date() })
+    .set({ status: parsed.data.status as never, updatedAt: new Date() })
     .where(eq(organizations.id, parsed.data.id))
     .returning();
   return NextResponse.json({ organization: updated });
