@@ -35,23 +35,29 @@ export function bucketName(): string {
   return b;
 }
 
-export type UploadKind = "logos" | "banners" | "legal-docs";
+export type UploadKind = "logos" | "banners" | "legal-docs" | "reports";
 
 const CONTENT_TYPES: Record<UploadKind, string[]> = {
   logos: ["image/png", "image/jpeg", "image/webp", "image/svg+xml"],
   banners: ["image/png", "image/jpeg", "image/webp"],
-  "legal-docs": ["application/pdf", "image/png", "image/jpeg"]
+  "legal-docs": ["application/pdf", "image/png", "image/jpeg"],
+  reports: ["application/pdf", "image/png", "image/jpeg", "image/webp"]
 };
 
-export function buildR2Key(kind: UploadKind, fileName: string): string {
+export function buildR2Key(kind: UploadKind, fileName: string, organizationId?: string): string {
   const safe = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
-  return `${kind}/${new Date().getFullYear()}/${randomUUID()}-${safe}`;
+  const scope = kind === "reports" ? `${organizationId}/` : "";
+  if (kind === "reports" && !organizationId) {
+    throw new Error("Organization ID is required for report uploads");
+  }
+  return `${kind}/${scope}${new Date().getFullYear()}/${randomUUID()}-${safe}`;
 }
 
 export async function createPresignedUploadUrl(params: {
   kind: UploadKind;
   fileName: string;
   contentType: string;
+  organizationId?: string;
   expiresInSeconds?: number;
 }): Promise<{ uploadUrl: string; r2Key: string; publicUrl: string | null }> {
   const allowed = CONTENT_TYPES[params.kind];
@@ -60,7 +66,7 @@ export async function createPresignedUploadUrl(params: {
       `contentType "${params.contentType}" is not allowed for ${params.kind}; allowed: ${allowed.join(", ")}`
     );
   }
-  const key = buildR2Key(params.kind, params.fileName);
+  const key = buildR2Key(params.kind, params.fileName, params.organizationId);
   const cmd = new PutObjectCommand({
     Bucket: bucketName(),
     Key: key,

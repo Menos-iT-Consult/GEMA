@@ -1,4 +1,4 @@
-export type UploadKind = "logos" | "banners" | "legal-docs";
+export type UploadKind = "logos" | "banners" | "legal-docs" | "reports";
 
 /** Fallback MIME map for browsers/OS combos that report an empty File.type. */
 const EXT_TO_TYPE: Record<string, string> = {

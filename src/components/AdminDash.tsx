@@ -16,8 +16,10 @@ import {
   ShieldCheck,
   TrendingUp,
   Activity,
-  ArrowUpRight
+  ArrowUpRight,
+  Inbox
 } from "lucide-react";
+import AdminSubmissions from "@/components/admin/AdminSubmissions";
 
 type OrgRow = {
   id: string;
@@ -67,7 +69,8 @@ const TABS = [
   { id: "Overview", icon: LayoutDashboard },
   { id: "Approvals", icon: ClipboardCheck },
   { id: "Organizations", icon: Building2 },
-  { id: "Users", icon: UsersIcon }
+  { id: "Users", icon: UsersIcon },
+  { id: "Submissions", icon: Inbox }
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 
@@ -264,7 +267,7 @@ export default function AdminDash() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {TABS.map((t) => (
+        {TABS.filter((t) => t.id !== "Submissions" || d.me.role === "SUPER_ADMIN").map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
@@ -542,6 +545,8 @@ className={`ml-1 rounded-full px-1.5 text-xs ${
           </div>
         </div>
       )}
+
+      {tab === "Submissions" && d.me.role === "SUPER_ADMIN" && <AdminSubmissions />}
     </div>
   );
 }

@@ -16,6 +16,13 @@ import { useState, useEffect } from "react";
 
 const OCHRE = "#f47728";
 
+type HomepageStats = {
+  verifiedOrganizations: number;
+  representedRegions: number;
+  activeMembers: number;
+  regions: { region: string; count: number }[];
+};
+
 const pillars = [
   {
     icon: ShieldCheck,
@@ -37,41 +44,23 @@ const pillars = [
   },
 ];
 
-const regionalSpotlight = [
-  { region: "Greater Accra", ministries: 84 },
-  { region: "Ashanti", ministries: 72 },
-  { region: "Northern", ministries: 58 },
-];
-
 export default function HomePage() {
-  const [statsData, setStatsData] = useState({
-    regions: "--",
-    ministries: "--",
-    partnerships: "--"
-  });
-  const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState<HomepageStats | null>(null);
+  const [statsError, setStatsError] = useState(false);
 
   useEffect(() => {
     let active = true;
     const load = async () => {
       try {
-        const response = await fetch("/api/organizations?status=APPROVED&pageSize=1", {
+        const response = await fetch("/api/organizations?status=APPROVED&pageSize=1&includeStats=true", {
           cache: "no-store"
         });
         if (!response.ok) throw new Error("Failed to fetch stats");
         const data = await response.json();
-        if (active) {
-          const totalMinistries = data.total ?? 0;
-          setStatsData({
-            regions: "16",
-            ministries: totalMinistries.toLocaleString(),
-            partnerships: "24"
-          });
-        }
+        if (active) setStatsData(data.stats);
       } catch (e) {
         console.error("Stats load error:", e);
-      } finally {
-        if (active) setLoading(false);
+        if (active) setStatsError(true);
       }
     };
 
@@ -82,30 +71,13 @@ export default function HomePage() {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 p-8 text-navy-950">
-        <div className="max-w-lg mx-auto">
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="h-10 w-16 animate-pulse rounded bg-slate-200" />
-                <div className="mt-2 text-sm text-slate-700">Loading...</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const maxRegionCount = statsData?.regions[0]?.count ?? 1;
 
   return (
     <>
       <Navbar />
 
-      <main className="relative bg-slate-50 text-slate-900">
-        <div className="absolute inset-x-0 top-16 h-[520px] bg-gradient-to-br from-white via-slate-50 to-emerald-50" />
-
+      <main className="homepage-grid-background relative text-white">
         <section className="relative mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr]">
 
@@ -115,11 +87,11 @@ export default function HomePage() {
                 Ghana Evangelical Missions Association
               </div>
 
-              <h1 className="mt-6 max-w-xl font-serif text-4xl font-bold leading-tight text-navy-950 sm:text-5xl lg:text-6xl">
-                A stronger Gospel network for <span className="font-medium text-ochre-800">Ghana</span>
+              <h1 className="mt-6 max-w-xl font-serif text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+                A stronger Gospel network for <span className="font-medium text-amber-300">Ghana</span>
               </h1>
 
-              <p className="mt-5 max-w-xl text-lg leading-8 text-slate-700">
+              <p className="mt-5 max-w-xl text-lg leading-8 text-slate-200">
                 Unite gospel leaders, churches, and mission organizations under one trusted platform for discovery, partnership, and Kingdom impact.
               </p>
 
@@ -132,9 +104,12 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm font-medium text-slate-700">
-                <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-ochre-800" /> Verified ministries</div>
-                <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-emerald-800" /> Across all 16 regions</div>
+              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm font-medium text-slate-200">
+                <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-amber-300" /> Verified ministries</div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-emerald-300" />
+                  {statsData ? `${statsData.representedRegions} of 16 regions represented` : "Regional network"}
+                </div>
               </div>
             </div>
 
@@ -148,32 +123,41 @@ export default function HomePage() {
 
                   <div className="mt-6 grid gap-4 sm:grid-cols-2">
                     <div className="rounded-2xl bg-white p-4 text-navy-950">
-                      <div className="text-4xl font-bold">250+</div>
-                      <div className="mt-1 text-sm text-slate-700">Verified members</div>
+                      <div className="text-4xl font-bold">{statsData?.verifiedOrganizations.toLocaleString() ?? "—"}</div>
+                      <div className="mt-1 text-sm text-slate-700">Approved organizations</div>
                     </div>
                     <div className="rounded-2xl bg-amber-100 p-4 text-navy-950 ring-1 ring-amber-200">
-                      <div className="text-4xl font-bold">24</div>
-                      <div className="mt-1 text-sm text-slate-700">Partnerships</div>
+                      <div className="text-4xl font-bold">{statsData?.activeMembers.toLocaleString() ?? "—"}</div>
+                      <div className="mt-1 text-sm text-slate-700">Active member accounts</div>
                     </div>
                   </div>
 
                   <div className="mt-6 rounded-2xl bg-white p-4">
                     <div className="flex items-center justify-between text-sm font-semibold text-slate-800">
                       <span>Regional coverage</span>
-                      <span>16 regions</span>
+                      <span>{statsData ? `${statsData.representedRegions} / 16` : "— / 16"}</span>
                     </div>
                     <div className="mt-4 space-y-3">
-                      {regionalSpotlight.map((item) => (
+                      {(statsData?.regions ?? []).map((item) => (
                         <div key={item.region}>
                           <div className="flex items-center justify-between text-xs font-medium text-slate-700">
                             <span>{item.region}</span>
-                            <span>{item.ministries}</span>
+                            <span>{item.count}</span>
                           </div>
                           <div className="h-2 rounded-full bg-slate-100">
-                            <div className="h-2 rounded-full" style={{ width: `${item.ministries / 4}%`, backgroundColor: OCHRE }} />
+                            <div
+                              className="h-2 rounded-full"
+                              style={{
+                                width: `${Math.max(4, (item.count / maxRegionCount) * 100)}%`,
+                                backgroundColor: OCHRE
+                              }}
+                            />
                           </div>
                         </div>
                       ))}
+                      {statsData?.regions.length === 0 && (
+                        <p className="text-sm text-slate-600">No approved organizations yet.</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -194,25 +178,36 @@ export default function HomePage() {
 
         <section className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
           <div className="grid gap-6 lg:grid-cols-3">
-            <div key="regions" className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
-              <div className="text-4xl font-bold font-serif text-navy-950">{statsData.regions}</div>
+            <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
+              <div className="text-4xl font-bold font-serif text-navy-950">
+                {statsData?.representedRegions ?? "—"}
+              </div>
               <div className="mt-2 text-sm font-medium text-slate-600">Regions represented</div>
             </div>
-            <div key="ministries" className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
-              <div className="text-4xl font-bold font-serif text-navy-950">{statsData.ministries}</div>
-              <div className="mt-2 text-sm font-medium text-slate-600">Verified ministries</div>
+            <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
+              <div className="text-4xl font-bold font-serif text-navy-950">
+                {statsData?.verifiedOrganizations.toLocaleString() ?? "—"}
+              </div>
+              <div className="mt-2 text-sm font-medium text-slate-600">Approved organizations</div>
             </div>
-            <div key="partnerships" className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
-              <div className="text-4xl font-bold font-serif text-navy-950">{statsData.partnerships}</div>
-              <div className="mt-2 text-sm font-medium text-slate-600">Active partnerships</div>
+            <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur-sm">
+              <div className="text-4xl font-bold font-serif text-navy-950">
+                {statsData?.activeMembers.toLocaleString() ?? "—"}
+              </div>
+              <div className="mt-2 text-sm font-medium text-slate-600">Active member accounts</div>
             </div>
           </div>
+          {statsError && (
+            <p role="alert" className="mt-4 text-sm text-slate-600">
+              Current network statistics are temporarily unavailable.
+            </p>
+          )}
         </section>
 
         <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-20">
           <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-900">Why GEMA matters</p>
-            <h2 className="mt-3 font-serif text-3xl font-bold text-navy-950 sm:text-4xl">Built for ministry visibility, connection, and collaboration</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300">Why GEMA matters</p>
+            <h2 className="mt-3 font-serif text-3xl font-bold text-white sm:text-4xl">Built for ministry visibility, connection, and collaboration</h2>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
@@ -244,13 +239,16 @@ export default function HomePage() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-3">
-              {regionalSpotlight.map((item) => (
+              {(statsData?.regions ?? []).map((item) => (
                 <div key={item.region} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
                   <div className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-navy-950">{item.region}</div>
-                  <div className="mt-5 text-4xl font-bold text-navy-950">{item.ministries}</div>
-                  <div className="mt-2 text-sm text-slate-600">Ministries and organizations</div>
+                  <div className="mt-5 text-4xl font-bold text-navy-950">{item.count.toLocaleString()}</div>
+                  <div className="mt-2 text-sm text-slate-600">Approved organizations</div>
                 </div>
               ))}
+              {statsData?.regions.length === 0 && (
+                <p className="text-sm text-slate-600">Regional figures will appear when organizations are approved.</p>
+              )}
             </div>
           </div>
         </section>
@@ -267,8 +265,8 @@ export default function HomePage() {
                 <Link href="/register" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold text-navy-950 shadow-sm transition hover:brightness-95" style={{ backgroundColor: OCHRE }}>
                   Join Us <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/admin/login" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/15">
-                  Admin Login
+                <Link href="/portal/login" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/15">
+                  Organisation Login
                 </Link>
               </div>
             </div>

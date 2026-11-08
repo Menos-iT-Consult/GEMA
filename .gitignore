@@ -3,7 +3,6 @@ node_modules
 dist
 .env
 .env.local
-drizzle/*.sql
 *.log
 .DS_Store
 tsconfig.tsbuildinfo

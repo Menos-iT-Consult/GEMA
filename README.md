@@ -9,6 +9,8 @@ Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2
 4. Seed admin: run `seedAdmin()` once (or insert via Studio), then login at `/admin/login`.
 5. `npm run dev`
 
+For an existing database, apply the organization-submission migration with `npm run db:migrate` before deploying this version. Use `db:push` for a fresh database instead of applying this incremental migration.
+
 ## Routes
 - `/` animated GEMA welcome page; `/directory` ministry directory (filters + grid/list + profile modal + regional hub)
 - `/register` 4-step onboarding (R2 presigned uploads, faith affirmation -> PENDING_REVIEW)
@@ -16,5 +18,5 @@ Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2
 - APIs: `GET /api/organizations`, `POST /api/register`, `POST /api/uploads/presign`, `GET|PATCH|POST /api/admin`, `POST /api/auth/login`
 
 ## Env
-See `.env.example`. R2 uses S3-compatible presigned PUT URLs (`logos/`, `banners/`, `legal-docs/`).
+See `.env.example`. R2 uses S3-compatible presigned PUT URLs (`logos/`, `banners/`, `legal-docs/`, and organisation-scoped `reports/` uploads). Organisation users can send reports and photos from the portal; central administrators can review them in the Admin dashboard’s Submissions tab.
 When deploying to Vercel, set every variable from `.env.example` in Project → Settings → Environment Variables (`DATABASE_URL`, `JWT_SECRET`, `R2_*`, `NEXT_PUBLIC_*`) — `/api/uploads/presign` returns 500 with a config hint until the `R2_*` vars exist.

@@ -1,17 +1,19 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { LayoutDashboard, Building2, Users as UsersIcon } from "lucide-react";
+import { LayoutDashboard, Building2, Users as UsersIcon, FileText } from "lucide-react";
 import PortalNav from "@/components/PortalNav";
 import PortalOverview from "@/components/portal/PortalOverview";
 import PortalProfile from "@/components/portal/PortalProfile";
 import PortalMembers from "@/components/portal/PortalMembers";
+import PortalSubmissions from "@/components/portal/PortalSubmissions";
 import type { PortalData } from "@/lib/portal-types";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { id: "Overview", icon: LayoutDashboard },
   { id: "Profile", icon: Building2 },
-  { id: "Members", icon: UsersIcon }
+  { id: "Members", icon: UsersIcon },
+  { id: "Reports & Photos", icon: FileText }
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -107,6 +109,7 @@ export default function PortalDash() {
       {tab === "Overview" && <PortalOverview data={d} onNavigate={setTab} />}
       {tab === "Profile" && <PortalProfile data={d} onSaved={() => load()} />}
       {tab === "Members" && <PortalMembers data={d} onChanged={() => load()} />}
+      {tab === "Reports & Photos" && <PortalSubmissions />}
     </div>
   );
 }

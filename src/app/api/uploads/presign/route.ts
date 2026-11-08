@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createPresignedUploadUrl, type UploadKind } from "@/lib/r2";
+import { getActiveOrganizationSession } from "@/lib/portal-access";
 
 const bodySchema = z.object({
-  kind: z.enum(["logos", "banners", "legal-docs"]),
+  kind: z.enum(["logos", "banners", "legal-docs", "reports"]),
   fileName: z.string().min(1).max(200),
   contentType: z.string().min(1).max(120)
 });
@@ -24,11 +25,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Invalid upload request — ${detail}` }, { status: 400 });
   }
 
+  const organizationId =
+    parsed.data.kind === "reports"
+      ? await getActiveOrganizationSession()
+      : null;
+  if (organizationId && "error" in organizationId) {
+    return NextResponse.json(
+      { error: organizationId.error },
+      { status: organizationId.status }
+    );
+  }
+
   try {
     const result = await createPresignedUploadUrl({
       kind: parsed.data.kind as UploadKind,
       fileName: parsed.data.fileName,
-      contentType: parsed.data.contentType
+      contentType: parsed.data.contentType,
+      ...(organizationId && "session" in organizationId
+        ? { organizationId: organizationId.orgId }
+        : {})
     });
     return NextResponse.json(result);
   } catch (e) {
@@ -47,4 +62,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
-

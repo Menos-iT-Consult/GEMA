@@ -6,7 +6,8 @@ import {
   jsonb,
   integer,
   pgEnum,
-  uniqueIndex
+  uniqueIndex,
+  index
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -35,6 +36,11 @@ export const orgStatusEnum = pgEnum("org_status", [
   "APPROVED",
   "SUSPENDED",
   "RENEWAL_DUE"
+]);
+
+export const organizationSubmissionStatusEnum = pgEnum("organization_submission_status", [
+  "NEW",
+  "REVIEWED"
 ]);
 
 export const userRoleEnum = pgEnum("user_role", [
@@ -105,6 +111,32 @@ export const users = pgTable("users", {
   isActive: integer("is_active").default(1),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull()
 });
+
+export type OrganizationSubmissionAttachment = {
+  key: string;
+  fileName: string;
+  contentType: string;
+};
+
+export const organizationSubmissions = pgTable("organization_submissions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orgId: uuid("org_id")
+    .notNull()
+    .references(() => organizations.id, { onDelete: "cascade" }),
+  submittedBy: uuid("submitted_by").references(() => users.id, { onDelete: "set null" }),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  attachments: jsonb("attachments")
+    .$type<OrganizationSubmissionAttachment[]>()
+    .notNull()
+    .default([]),
+  status: organizationSubmissionStatusEnum("status").notNull().default("NEW"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true })
+}, (table) => ({
+  orgCreatedIdx: index("organization_submissions_org_created_idx").on(table.orgId, table.createdAt),
+  statusCreatedIdx: index("organization_submissions_status_created_idx").on(table.status, table.createdAt)
+}));
 
 export const organizationsRelations = relations(organizations, ({ many }) => ({
   members: many(users)

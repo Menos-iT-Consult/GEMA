@@ -19,6 +19,37 @@ body {
 }
 
 @layer utilities {
+  .homepage-grid-background {
+    --homepage-grid-color: rgba(114, 114, 114, 0.3);
+    background-color: #191a1a;
+    background-image:
+      linear-gradient(
+        0deg,
+        transparent 24%,
+        var(--homepage-grid-color) 25%,
+        var(--homepage-grid-color) 26%,
+        transparent 27%,
+        transparent 74%,
+        var(--homepage-grid-color) 75%,
+        var(--homepage-grid-color) 76%,
+        transparent 77%,
+        transparent
+      ),
+      linear-gradient(
+        90deg,
+        transparent 24%,
+        var(--homepage-grid-color) 25%,
+        var(--homepage-grid-color) 26%,
+        transparent 27%,
+        transparent 74%,
+        var(--homepage-grid-color) 75%,
+        var(--homepage-grid-color) 76%,
+        transparent 77%,
+        transparent
+      );
+    background-size: 55px 55px;
+  }
+
   .fade-up {
     animation: fade-up 700ms ease-out both;
   }
@@ -88,4 +119,3 @@ body {
 .gm-btn-ghost {
   @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50;
 }
-
