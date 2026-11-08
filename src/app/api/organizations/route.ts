@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
   const denomination = searchParams.get("denomination") ?? "";
   const umbrellaBody = searchParams.get("umbrellaBody") ?? "";
   const focus = searchParams.get("focus") ?? "";
+  const slug = searchParams.get("slug") ?? "";
   const status = searchParams.get("status") ?? "APPROVED";
   const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
   const pageSize = Math.min(50, Math.max(1, Number(searchParams.get("pageSize") ?? "12")));
@@ -20,6 +21,7 @@ export async function GET(req: NextRequest) {
   if (region) filters.push(eq(organizations.region, region as never));
   if (denomination) filters.push(eq(organizations.denomination, denomination));
   if (umbrellaBody) filters.push(eq(organizations.umbrellaBody, umbrellaBody as never));
+  if (slug) filters.push(eq(organizations.slug, slug));
   if (q) {
     filters.push(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

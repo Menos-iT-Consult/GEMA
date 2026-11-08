@@ -94,6 +94,8 @@ export async function PATCH(req: NextRequest) {
   }
 
   const d = parsed.data;
+  const isActive =
+    typeof d.isActive === "boolean" ? (d.isActive ? 1 : 0) : d.isActive;
 
   // The target member must belong to the signed-in organisation.
   const [target] = await db
@@ -106,7 +108,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Member not found" }, { status: 404 });
 
   // Never allow the last active organisation admin to lock themselves out.
-  if (d.isActive === 0 || (d.role && d.role !== "ORG_ADMIN")) {
+  if (isActive === 0 || (d.role && d.role !== "ORG_ADMIN")) {
     const [self] = await db
       .select({ id: users.id, role: users.role, isActive: users.isActive })
       .from(users)
@@ -116,7 +118,7 @@ export async function PATCH(req: NextRequest) {
       self &&
       auth.session.orgId &&
       d.userId === self.id &&
-      (d.isActive === 0 || (d.role && d.role !== self.role));
+      (isActive === 0 || (d.role && d.role !== self.role));
     if (demotingSelf) {
       return NextResponse.json(
         { error: "You cannot remove your own admin access" },
@@ -128,7 +130,7 @@ export async function PATCH(req: NextRequest) {
   const [updated] = await db
     .update(users)
     .set({
-      ...(d.isActive !== undefined ? { isActive: d.isActive } : {}),
+      ...(isActive !== undefined ? { isActive } : {}),
       ...(d.role !== undefined ? { role: d.role } : {})
     })
     .where(and(eq(users.id, d.userId), eq(users.orgId, auth.session.orgId as string)))

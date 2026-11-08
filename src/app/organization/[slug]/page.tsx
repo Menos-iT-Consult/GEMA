@@ -2,39 +2,28 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShieldCheck, MapPin, Users, Compass, Building2 } from "lucide-react";
-import { GHANA_REGIONS, DENOMINATIONS, UMBRELLA_BODIES, MINISTRY_FOCUS_OPTIONS } from "@/lib/constants";
-import { organizations } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { slugify } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import type { Organization } from "@/lib/db/schema";
 
 export default function OrganizationPage() {
-  // Get slug from URL params
-  const { slug } = useState(() => {
-    const params = new (typeof window !== "undefined" ? window.constructor : {})("https://example.com/");
-    return params.get("slug") || "";
-  })[1];
-
-  const [org, setOrg] = useState(null);
+  const { slug } = useParams<{ slug: string }>();
+  const [org, setOrg] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
     const load = async () => {
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
+      setLoading(true);
       try {
-        const [found] = await db
-          .select()
-          .from(organizations)
-          .where(eq(organizations.slug, slug))
-          .limit(1);
-        if (active) setOrg(found);
+        const response = await fetch(`/api/organizations?slug=${encodeURIComponent(slug)}&pageSize=1`);
+        if (!response.ok) throw new Error(`Organization request failed (${response.status})`);
+        const data = await response.json();
+        if (active) setOrg(data.items?.[0] ?? null);
       } catch (e) {
         console.error("Error loading organization:", e);
+        if (active) setOrg(null);
       } finally {
         if (active) setLoading(false);
       }
@@ -47,13 +36,21 @@ export default function OrganizationPage() {
     };
   }, [slug]);
 
-  if (loading || !org) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gema-50 text-navy-950 p-8">
+        <p className="text-slate-600">Loading organization…</p>
+      </div>
+    );
+  }
+
+  if (!org) {
     return (
       <div className="min-h-screen bg-gema-50 text-navy-950 p-8">
         <div className="max-w-lg mx-auto">
           <h1 className="text-3xl font-bold text-navy-950 mb-4">Organization</h1>
           <p className="text-slate-600">Organization not found</p>
-          <a href="/directory" className="bg-ochre-600 text-white px-4 py-2 rounded mt-4">Back to Directory</a>
+          <Link href="/directory" className="bg-ochre-600 text-white px-4 py-2 rounded mt-4">Back to Directory</Link>
         </div>
       </div>
     );
@@ -62,6 +59,7 @@ export default function OrganizationPage() {
   const logoUrl = org.logoR2Key
     ? `${process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL}/${org.logoR2Key}`
     : null;
+  const socialLinks = org.socialLinks ?? {};
 
   return (
     <div className="min-h-screen bg-gema-50 text-navy-950">
@@ -131,12 +129,12 @@ export default function OrganizationPage() {
               </div>
             )}
 
-            {org.socialLinks && Object.keys(org.socialLinks).length > 0 && (
+            {Object.keys(socialLinks).length > 0 && (
               <div className="mt-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-royal-600">Social Links</p>
                 <div className="mt-2 grid grid-cols-2 gap-2">
-                  {["facebook", "instagram", "twitter", "youtube"].map((key) => {
-                    const url = org.socialLinks[key];
+                  {(["facebook", "instagram", "twitter", "youtube"] as const).map((key) => {
+                    const url = socialLinks[key];
                     if (url) {
                       return (
                         <a
