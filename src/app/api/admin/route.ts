@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { organizations, duesRecords, users } from "@/lib/db/schema";
+import { organizations, users } from "@/lib/db/schema";
 import { readSession, hashPassword, normalizeEmail } from "@/lib/auth";
-import {
-  updateStatusSchema,
-  createDuesSchema,
-  updateDuesSchema,
-  updateUserSchema,
-  createOrgSchema
-} from "@/lib/validators";
+import { updateStatusSchema, updateUserSchema, createOrgSchema } from "@/lib/validators";
 import { eq, sql, and, inArray, desc, gte, type SQL } from "drizzle-orm";
 import { slugify } from "@/lib/utils";
 
@@ -30,13 +24,11 @@ export async function GET() {
   const session = await assertAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  // Regional overseers only see data for their assigned region
   const scope: SQL | undefined =
     session.role === "REGIONAL_OVERSEER" && session.assignedRegion
       ? eq(organizations.region, session.assignedRegion as never)
       : undefined;
 
-  // Status counts (all five statuses)
   const statusRows = await Promise.all(
     STATUS_KEYS.map((k) =>
       db
@@ -76,7 +68,6 @@ export async function GET() {
     .groupBy(organizations.umbrellaBody)
     .orderBy(desc(sql`count(*)`));
 
-  // New organizations this month (region-scoped)
   const monthStart = new Date();
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
@@ -88,7 +79,6 @@ export async function GET() {
     );
   const newThisMonth = Number(newMonthRow?.c ?? 0);
 
-  // Approval queue: pending review + under vetting (region-scoped)
   const queueCond = scope
     ? and(inArray(organizations.status, ["PENDING_REVIEW", "UNDER_VETTING"]), scope)
     : inArray(organizations.status, ["PENDING_REVIEW", "UNDER_VETTING"]);
@@ -99,7 +89,6 @@ export async function GET() {
     .orderBy(organizations.createdAt)
     .limit(50);
 
-  // All organizations for the management table (region-scoped)
   const orgs = await db
     .select({
       id: organizations.id,
@@ -118,36 +107,6 @@ export async function GET() {
     .orderBy(desc(organizations.createdAt))
     .limit(500);
 
-  // Dues: totals + list with organisation names
-  const [duesAgg] = await db
-    .select({
-      collected: sql<number>`count(*) filter (where ${duesRecords.status} = 'PAID')`,
-      totalGhs: sql<number>`coalesce(sum(${duesRecords.amountGhs}) filter (where ${duesRecords.status} = 'PAID'), 0)`,
-      pending: sql<number>`count(*) filter (where ${duesRecords.status} = 'PENDING')`,
-      overdue: sql<number>`count(*) filter (where ${duesRecords.status} = 'OVERDUE')`
-    })
-    .from(duesRecords)
-    .innerJoin(organizations, eq(duesRecords.orgId, organizations.id))
-    .where(scope);
-
-  const dues = await db
-    .select({
-      id: duesRecords.id,
-      orgId: duesRecords.orgId,
-      orgName: organizations.name,
-      year: duesRecords.year,
-      amountGhs: duesRecords.amountGhs,
-      status: duesRecords.status,
-      paymentReference: duesRecords.paymentReference,
-      paidAt: duesRecords.paidAt,
-      createdAt: duesRecords.createdAt
-    })
-    .from(duesRecords)
-    .leftJoin(organizations, eq(duesRecords.orgId, organizations.id))
-    .orderBy(desc(duesRecords.createdAt))
-    .limit(100);
-
-  // Users (super admin only — excludes password hashes)
   const userList =
     session.role === "SUPER_ADMIN"
       ? await db
@@ -176,10 +135,6 @@ export async function GET() {
       underVetting: statusCounts.UNDER_VETTING,
       suspended: statusCounts.SUSPENDED,
       renewalDue: statusCounts.RENEWAL_DUE,
-      duesCollected: Number(duesAgg?.collected ?? 0),
-      duesTotalGhs: Number(duesAgg?.totalGhs ?? 0),
-      duesPending: Number(duesAgg?.pending ?? 0),
-      duesOverdue: Number(duesAgg?.overdue ?? 0),
       newThisMonth
     },
     statusCounts,
@@ -188,41 +143,19 @@ export async function GET() {
     byUmbrella,
     pendingQueue,
     orgs,
-    dues,
     users: userList
   });
 }
 
-
-
 export async function PATCH(req: NextRequest) {
   const session = await assertAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  // Update a dues record (mark paid / pending / overdue)
-  if ("duesId" in body) {
-    const parsed = updateDuesSchema.safeParse(body);
-    if (!parsed.success) return NextResponse.json({ error: "Invalid dues update" }, { status: 400 });
-    const [updated] = await db
-      .update(duesRecords)
-      .set({
-        status: parsed.data.status,
-        ...(parsed.data.paymentReference !== undefined
-          ? { paymentReference: parsed.data.paymentReference }
-          : {}),
-        paidAt: parsed.data.status === "PAID" ? new Date() : null
-      })
-      .where(eq(duesRecords.id, parsed.data.duesId))
-      .returning();
-    if (!updated) return NextResponse.json({ error: "Dues record not found" }, { status: 404 });
-    return NextResponse.json({ dues: updated });
-  }
-
-  // Update a user (activate / deactivate, change role)
   if ("userId" in body) {
     if (session.role !== "SUPER_ADMIN")
       return NextResponse.json({ error: "Super admin only" }, { status: 403 });
@@ -244,7 +177,6 @@ export async function PATCH(req: NextRequest) {
     });
   }
 
-  // Update organisation status
   const parsed = updateStatusSchema.safeParse(body);
   if (!parsed.success)
     return NextResponse.json({ error: "Invalid status update" }, { status: 400 });
@@ -273,12 +205,12 @@ export async function PATCH(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await assertAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  // Create an organisation directly from the dashboard.
   if ("name" in body && "email" in body) {
     const parsed = createOrgSchema.safeParse(body);
     if (!parsed.success) {
@@ -289,7 +221,6 @@ export async function POST(req: NextRequest) {
     }
     const d = parsed.data;
 
-    // Regional overseers may only add organisations inside their own region.
     if (session.role === "REGIONAL_OVERSEER" && session.assignedRegion) {
       if (d.region !== session.assignedRegion) {
         return NextResponse.json(
@@ -297,7 +228,6 @@ export async function POST(req: NextRequest) {
           { status: 403 }
         );
       }
-      // A regional overseer cannot self-approve — the new entry enters the queue.
       if (d.status === "APPROVED") {
         return NextResponse.json(
           { error: "Regional overseers cannot add approved organisations directly" },
@@ -306,12 +236,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Slug: use the supplied one, otherwise derive it from the name.
     let slug = d.slug?.trim() || slugify(d.name);
     if (!slug) {
       return NextResponse.json({ error: "Could not derive a slug from the name" }, { status: 400 });
     }
-    // Guarantee uniqueness by appending a short suffix when taken.
     const clash = await db
       .select({ id: organizations.id })
       .from(organizations)
@@ -321,7 +249,6 @@ export async function POST(req: NextRequest) {
       slug = `${slug.slice(0, 90)}-${Date.now().toString(36).slice(-4)}`;
     }
 
-    // Optional portal login for the new organisation.
     if (d.adminUser) {
       const adminEmail = normalizeEmail(d.adminUser.email);
       const existingUser = await db
@@ -379,30 +306,8 @@ export async function POST(req: NextRequest) {
       createdUserId = u?.id ?? null;
     }
 
-    return NextResponse.json(
-      { organization: row, userId: createdUserId },
-      { status: 201 }
-    );
+    return NextResponse.json({ organization: row, userId: createdUserId }, { status: 201 });
   }
 
-  const parsed = createDuesSchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json({ error: "Invalid dues record" }, { status: 400 });
-
-  if (session.role === "REGIONAL_OVERSEER" && session.assignedRegion) {
-    const [org] = await db
-      .select({ region: organizations.region })
-      .from(organizations)
-      .where(eq(organizations.id, parsed.data.orgId))
-      .limit(1);
-    if (!org) return NextResponse.json({ error: "Organization not found" }, { status: 404 });
-    if (org.region !== session.assignedRegion)
-      return NextResponse.json({ error: "Outside your assigned region" }, { status: 403 });
-  }
-
-  const [row] = await db
-    .insert(duesRecords)
-    .values({ ...parsed.data, status: parsed.data.status as never })
-    .returning();
-  return NextResponse.json({ dues: row }, { status: 201 });
+  return NextResponse.json({ error: "Unsupported admin action" }, { status: 400 });
 }

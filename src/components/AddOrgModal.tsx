@@ -188,7 +188,7 @@ export default function AddOrgModal({
         </div>
 
         {err && (
-          <p className="mx-6 mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{err}</p>
+          <p className="mx-6 mt-4 rounded-xl bg-ochre-50 p-3 text-sm text-ochre-700">{err}</p>
         )}
 
         <div className="grid gap-4 p-6">
@@ -213,7 +213,7 @@ export default function AddOrgModal({
                 placeholder="auto-generated"
               />
             </div>
-            <div>
+<div>
               <label className="gm-label">Status</label>
               <select
                 className="gm-input"
@@ -228,7 +228,7 @@ export default function AddOrgModal({
                 ))}
               </select>
               {!allowStatusEdit && (
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-gema-500">
                   Only a super admin can set the status directly.
                 </p>
               )}
@@ -376,7 +376,7 @@ export default function AddOrgModal({
                   className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
                     f.focus.includes(m)
                       ? "bg-gema-700 text-white"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      : "bg-gema-100 text-gema-600 hover:bg-gema-200"
                   }`}
                 >
                   {m}

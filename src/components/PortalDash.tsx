@@ -1,15 +1,9 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import {
-  LayoutDashboard,
-  Building2,
-  Banknote,
-  Users as UsersIcon
-} from "lucide-react";
+import { LayoutDashboard, Building2, Users as UsersIcon } from "lucide-react";
 import PortalNav from "@/components/PortalNav";
 import PortalOverview from "@/components/portal/PortalOverview";
 import PortalProfile from "@/components/portal/PortalProfile";
-import PortalDues from "@/components/portal/PortalDues";
 import PortalMembers from "@/components/portal/PortalMembers";
 import type { PortalData } from "@/lib/portal-types";
 import { cn } from "@/lib/utils";
@@ -17,7 +11,6 @@ import { cn } from "@/lib/utils";
 const TABS = [
   { id: "Overview", icon: LayoutDashboard },
   { id: "Profile", icon: Building2 },
-  { id: "Dues", icon: Banknote },
   { id: "Members", icon: UsersIcon }
 ] as const;
 
@@ -97,21 +90,11 @@ export default function PortalDash() {
             )}
           >
             <t.icon className="h-4 w-4" /> {t.id}
-            {t.id === "Dues" && d.duesTotals.overdue > 0 && (
-              <span
-                className={cn(
-                  "ml-1 rounded-full px-1.5 text-xs",
-                  tab === t.id ? "bg-ochre-500 text-white" : "bg-red-100 text-red-700"
-                )}
-              >
-                {d.duesTotals.overdue}
-              </span>
-            )}
             {t.id === "Members" && d.members.length > 0 && (
               <span
                 className={cn(
                   "ml-1 rounded-full px-1.5 text-xs",
-                  tab === t.id ? "bg-ochre-500 text-white" : "bg-slate-200 text-slate-700"
+                  tab === t.id ? "bg-ochre-500 text-white" : "bg-gema-200 text-gema-700"
                 )}
               >
                 {d.members.length}
@@ -123,7 +106,6 @@ export default function PortalDash() {
 
       {tab === "Overview" && <PortalOverview data={d} onNavigate={setTab} />}
       {tab === "Profile" && <PortalProfile data={d} onSaved={() => load()} />}
-      {tab === "Dues" && <PortalDues data={d} />}
       {tab === "Members" && <PortalMembers data={d} onChanged={() => load()} />}
     </div>
   );

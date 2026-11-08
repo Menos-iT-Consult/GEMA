@@ -22,7 +22,7 @@ export default async function PortalPage() {
           Organisation Portal
         </h1>
         <p className="mt-1 text-sm text-slate-600">
-          Manage your ministry profile, dues records and team members.
+          Manage your ministry profile and team members.
         </p>
         <div className="mt-6">
           <PortalDash />

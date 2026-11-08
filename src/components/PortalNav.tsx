@@ -42,8 +42,8 @@ export default function PortalNav({
               className={cn(
                 "gm-badge",
                 status === "APPROVED"
-                  ? "bg-emerald-100 text-emerald-700"
-                  : "bg-amber-100 text-amber-700"
+                  ? "bg-gema-100 text-gema-700"
+                  : "bg-royal-100 text-royal-700"
               )}
             >
               {status.replace(/_/g, " ")}

@@ -24,71 +24,65 @@ export default function OrgCard({
     <button
       onClick={() => onSelect?.(org)}
       className={cn(
-        "gm-card overflow-hidden text-left",
-        layout === "list" && "flex gap-4 p-4"
+        "group rounded-xl overflow-hidden border border-slate-200 transition-colors hover:border-gema-300 hover:bg-gema-50",
+        layout === "grid" && "group-hover:shadow-lg"
       )}
     >
       {layout === "grid" ? (
         <>
-          <div className="relative h-28 bg-gradient-to-br from-gema-800 via-gema-600 to-gema-400 sm:h-36">
-            <div className="absolute inset-0 flex items-center justify-center">
-              {logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={logo} alt={org.name} className="h-14 w-14 rounded-2xl bg-white object-cover p-1 sm:h-20 sm:w-20" />
-              ) : (
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/95 font-serif text-3xl font-bold text-navy-950 sm:h-20 sm:w-20">
-                  {org.name.charAt(0)}
-                </span>
-              )}
-            </div>
-            {verified && (
-              <span className="gm-badge absolute left-3 top-3 bg-emerald-600 text-white">
-                <BadgeCheck className="h-3.5 w-3.5" /> Verified
+          {verified && (
+            <span className="absolute left-2 top-2 bg-gema-600 text-white rounded-sm text-xs font-semibold px-2 py-0.5">
+              <BadgeCheck className="h-3 w-3" /> Verified
+            </span>
+          )}
+          <div className="relative h-48 bg-gema-50 flex items-center justify-center">
+            {logo ? (
+              <img
+                src={logo}
+                alt={org.name}
+                className="h-24 w-24 rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <span className="h-24 w-24 rounded-lg bg-slate-200 flex items-center justify-center text-slate-400 text-2xl font-bold">
+                {org.name.charAt(0)}
               </span>
             )}
-            <span className="gm-badge absolute right-3 top-3 bg-ochre-100 text-ochre-600">
-              {org.region}
-            </span>
           </div>
-          <div className="p-3 sm:p-4">
-            <h3 className="font-serif text-base font-bold leading-snug text-navy-950 sm:text-lg">{org.name}</h3>
-            <p className="mt-1 flex items-center gap-1 text-xs text-slate-600 sm:text-sm">
-              <MapPin className="h-3 w-3" /> {org.cityTown}
-              {org.digitalAddress ? ` • ${org.digitalAddress}` : ""}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3">
-              <span className="gm-badge bg-royal-50 text-royal-600">{org.denomination}</span>
-              <span className="gm-badge bg-slate-100 text-slate-700">{org.umbrellaBody}</span>
-              {(org.ministryFocus ?? []).slice(0, 2).map((f) => (
-                <span key={f} className="gm-badge bg-ochre-50 text-ochre-600">{f}</span>
-              ))}
-            </div>
+          <div className="p-4">
+            <h3 className="font-serif font-medium text-navy-950 line-clamp-2 line-clamp-collapsed">{org.name}</h3>
+            {org.region && (
+              <p className="mt-2 text-sm text-slate-500">
+                <MapPin className="h-3 w-3 mr-1" /> {org.region}
+              </p>
+            )}
           </div>
         </>
       ) : (
         <>
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-navy-950 font-serif text-2xl font-bold text-ochre-300 sm:h-20 sm:w-20">
+          <div className="p-4">
             {logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={logo} alt={org.name} className="h-16 w-16 rounded-xl object-cover" />
+              <img
+                src={logo}
+                alt={org.name}
+                className="h-16 w-16 rounded-lg mx-auto mb-3 object-cover"
+              />
             ) : (
-              org.name.charAt(0)
+              <span className="h-16 w-16 rounded-lg bg-slate-200 mx-auto mb-3 text-slate-400 text-2xl font-bold">
+                {org.name.charAt(0)}
+              </span>
             )}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="flex items-center gap-2 font-serif text-base font-bold text-navy-950 sm:text-lg">
-              {org.name}
-              {verified && <BadgeCheck className="h-4 w-4 text-emerald-600" />}
-            </span>
-            <span className="mt-0.5 block truncate text-sm text-slate-600">
-              {org.cityTown}, {org.region} • {org.denomination} • {org.umbrellaBody}
-            </span>
-            <span className="mt-2 flex flex-wrap gap-1.5">
-              {(org.ministryFocus ?? []).slice(0, 3).map((f) => (
-                <span key={f} className="gm-badge bg-slate-100 text-slate-700">{f}</span>
-              ))}
-            </span>
-          </span>
+            <h3 className="font-serif font-medium text-navy-950 line-clamp-2">{org.name}</h3>
+            {org.region && (
+              <p className="mt-2 text-sm text-slate-500">
+                <MapPin className="mr-1 h-3 w-3" /> {org.region}
+              </p>
+            )}
+            {verified && (
+              <span className="mt-2 inline-flex items-center gap-1 rounded-sm px-2 py-0.5 bg-gema-600 text-white text-xs font-semibold">
+                <BadgeCheck className="h-3 w-3" /> Verified
+              </span>
+            )}
+          </div>
         </>
       )}
     </button>

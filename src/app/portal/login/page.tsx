@@ -50,7 +50,7 @@ export default function PortalLogin() {
       <div className="gm-card p-8">
         <h1 className="font-serif text-2xl font-bold text-navy-950">Organisation Portal</h1>
         <p className="mt-1 text-sm text-slate-600">
-          Sign in to manage your ministry profile, dues and members.
+          Sign in to manage your ministry profile and members.
         </p>
         {err && (
           <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{err}</p>

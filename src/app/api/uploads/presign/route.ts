@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createPresignedUploadUrl, type UploadKind } from "@/lib/r2";
 
 const bodySchema = z.object({
-  kind: z.enum(["logos", "banners", "legal-docs", "receipts"]),
+  kind: z.enum(["logos", "banners", "legal-docs"]),
   fileName: z.string().min(1).max(200),
   contentType: z.string().min(1).max(120)
 });

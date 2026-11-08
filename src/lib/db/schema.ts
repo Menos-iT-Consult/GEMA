@@ -44,8 +44,6 @@ export const userRoleEnum = pgEnum("user_role", [
   "MEMBER_VIEWER"
 ]);
 
-export const duesStatusEnum = pgEnum("dues_status", ["PAID", "PENDING", "OVERDUE"]);
-
 export const umbrellaBodyEnum = pgEnum("umbrella_body", [
   "GPCC",
   "GEA",
@@ -108,22 +106,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull()
 });
 
-export const duesRecords = pgTable("dues_records", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  orgId: uuid("org_id")
-    .references(() => organizations.id, { onDelete: "cascade" })
-    .notNull(),
-  year: integer("year").notNull(),
-  amountGhs: integer("amount_ghs").notNull(),
-  status: duesStatusEnum("status").notNull().default("PENDING"),
-  paymentReference: text("payment_reference"),
-  receiptR2Key: text("receipt_r2_key"),
-  paidAt: timestamp("paid_at", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull()
-});
-
 export const organizationsRelations = relations(organizations, ({ many }) => ({
-  dues: many(duesRecords),
   members: many(users)
 }));
 
@@ -134,14 +117,6 @@ export const usersRelations = relations(users, ({ one }) => ({
   })
 }));
 
-export const duesRecordsRelations = relations(duesRecords, ({ one }) => ({
-  organization: one(organizations, {
-    fields: [duesRecords.orgId],
-    references: [organizations.id]
-  })
-}));
-
 export type Organization = typeof organizations.$inferSelect;
 export type NewOrganization = typeof organizations.$inferInsert;
 export type AppUser = typeof users.$inferSelect;
-export type DuesRecord = typeof duesRecords.$inferSelect;

@@ -16,7 +16,7 @@ export default function RegionHub({ counts }: { counts: Record<string, number> }
                 <span className="font-semibold text-slate-700">{r}</span>
                 <span className="rounded-full bg-navy-950 px-2 py-0.5 text-xs font-bold text-white">{c}</span>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200">
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-gema-200">
                 <div className="h-full rounded-full bg-gradient-to-r from-royal-500 to-ochre-400" style={{ width: `${pct}%` }} />
               </div>
             </div>

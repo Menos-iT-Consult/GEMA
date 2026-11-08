@@ -111,20 +111,6 @@ export const updateStatusSchema = z.object({
   note: z.string().max(500).optional()
 });
 
-export const createDuesSchema = z.object({
-  orgId: z.string().uuid(),
-  year: z.number().int().min(2000).max(2100),
-  amountGhs: z.number().int().min(1),
-  status: z.enum(["PAID", "PENDING", "OVERDUE"]).default("PENDING"),
-  paymentReference: z.string().max(200).optional().nullable()
-});
-
-export const updateDuesSchema = z.object({
-  duesId: z.string().uuid(),
-  status: z.enum(["PAID", "PENDING", "OVERDUE"]),
-  paymentReference: z.string().max(200).optional().nullable()
-});
-
 export const updateUserSchema = z
   .object({
     userId: z.string().uuid(),

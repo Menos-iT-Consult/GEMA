@@ -16,7 +16,7 @@ const ROLE_LABEL: Record<string, string> = {
 
 const ROLE_BADGE: Record<string, string> = {
   ORG_ADMIN: "bg-royal-100 text-royal-700",
-  MEMBER_VIEWER: "bg-slate-100 text-slate-700"
+  MEMBER_VIEWER: "bg-gema-100 text-gema-700"
 };
 
 export default function PortalMembers({ data, onChanged }: Props) {
@@ -113,12 +113,12 @@ export default function PortalMembers({ data, onChanged }: Props) {
       </div>
 
       {msg && (
-        <p className="rounded-xl bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700">
+        <p className="rounded-xl bg-gema-50 px-4 py-2.5 text-sm font-semibold text-gema-700">
           {msg}
         </p>
       )}
       {err && (
-        <p className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700">{err}</p>
+        <p className="rounded-xl bg-ochre-50 px-4 py-2.5 text-sm font-semibold text-ochre-700">{err}</p>
       )}
 
       {canManage && (
@@ -248,18 +248,18 @@ export default function PortalMembers({ data, onChanged }: Props) {
                         <option value="MEMBER_VIEWER">Viewer</option>
                       </select>
                     ) : (
-                      <span className={`gm-badge ${ROLE_BADGE[m.role] ?? "bg-slate-100 text-slate-700"}`}>
+                      <span className={`gm-badge ${ROLE_BADGE[m.role] ?? "bg-gema-100 text-gema-700"}`}>
                         {ROLE_LABEL[m.role] ?? m.role}
                       </span>
                     )}
                   </td>
                   <td className="py-3">
                     <span
-                      className={`gm-badge ${
+className={`gm-badge ${
                         m.isActive === 1
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-slate-100 text-slate-500"
-                      }`}
+                          ? "bg-gema-100 text-gema-700"
+                          : "bg-gema-100 text-gema-700"
+                        }`}
                     >
                       {m.isActive === 1 ? "Active" : "Inactive"}
                     </span>

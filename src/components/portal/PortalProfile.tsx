@@ -136,7 +136,7 @@ export default function PortalProfile({ data, onSaved }: Props) {
         </dl>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Status</span>
-          <span className={`gm-badge ${ORG_BADGE[org.status] ?? "bg-slate-100 text-slate-700"}`}>
+          <span className={`gm-badge ${ORG_BADGE[org.status] ?? "bg-gema-100 text-gema-700"}`}>
             {org.status.replace(/_/g, " ")}
           </span>
         </div>
@@ -154,12 +154,12 @@ export default function PortalProfile({ data, onSaved }: Props) {
         </p>
 
         {msg && (
-          <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700">
+          <p className="mt-4 rounded-xl bg-gema-50 px-4 py-2.5 text-sm font-semibold text-gema-700">
             {msg}
           </p>
         )}
         {err && (
-          <p className="mt-4 rounded-xl bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700">
+          <p className="mt-4 rounded-xl bg-ochre-50 px-4 py-2.5 text-sm font-semibold text-ochre-700">
             {err}
           </p>
         )}
@@ -317,11 +317,11 @@ export default function PortalProfile({ data, onSaved }: Props) {
             ).map(([kind, key, label, accept]) => (
               <label
                 key={key}
-                className="cursor-pointer rounded-xl border border-dashed p-4 text-center text-sm transition hover:bg-slate-50"
+                className="cursor-pointer rounded-xl border border-dashed p-4 text-center text-sm transition hover:bg-gema-50"
               >
                 {label}
                 <br />
-                <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                <span className="inline-flex items-center gap-1 text-xs text-gema-600">
                   {uploading === key ? (
                     <>
                       <Loader2 className="h-3 w-3 animate-spin" /> Uploading…

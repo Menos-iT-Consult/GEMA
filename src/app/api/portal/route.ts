@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { organizations, duesRecords, users } from "@/lib/db/schema";
+import { organizations, users } from "@/lib/db/schema";
 import { readSession } from "@/lib/auth";
 import { portalProfileSchema } from "@/lib/validators";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
   const session = await readSession();
@@ -41,12 +41,6 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const dues = await db
-    .select()
-    .from(duesRecords)
-    .where(eq(duesRecords.orgId, org.id))
-    .orderBy(desc(duesRecords.year), desc(duesRecords.createdAt));
-
   const members = await db
     .select({
       id: users.id,
@@ -58,16 +52,6 @@ export async function GET(req: NextRequest) {
     })
     .from(users)
     .where(eq(users.orgId, org.id));
-
-  const [totals] = await db
-    .select({
-      paid: sql<number>`count(*) filter (where ${duesRecords.status} = 'PAID')`,
-      pending: sql<number>`count(*) filter (where ${duesRecords.status} = 'PENDING')`,
-      overdue: sql<number>`count(*) filter (where ${duesRecords.status} = 'OVERDUE')`,
-      amountPaid: sql<number>`coalesce(sum(${duesRecords.amountGhs}) filter (where ${duesRecords.status} = 'PAID'), 0)`
-    })
-    .from(duesRecords)
-    .where(eq(duesRecords.orgId, org.id));
 
   const [me] = await db
     .select({ id: users.id, fullName: users.fullName })
@@ -82,14 +66,7 @@ export async function GET(req: NextRequest) {
       fullName: me?.fullName ?? session.email
     },
     organization: org,
-    dues,
-    members,
-    duesTotals: {
-      paid: Number(totals?.paid ?? 0),
-      pending: Number(totals?.pending ?? 0),
-      overdue: Number(totals?.overdue ?? 0),
-      amountPaid: Number(totals?.amountPaid ?? 0)
-    }
+    members
   });
 }
 

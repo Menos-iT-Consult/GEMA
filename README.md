@@ -10,11 +10,11 @@ Full-stack Next.js 14 + TypeScript + Drizzle ORM (Neon Postgres) + Cloudflare R2
 5. `npm run dev`
 
 ## Routes
-- `/` directory (filters + grid/list + profile modal + regional hub); `/directory` redirects to `/`
+- `/` animated GEMA welcome page; `/directory` ministry directory (filters + grid/list + profile modal + regional hub)
 - `/register` 4-step onboarding (R2 presigned uploads, faith affirmation -> PENDING_REVIEW)
 - `/admin` stats, region/denomination breakdown, approvals queue, CSV export
 - APIs: `GET /api/organizations`, `POST /api/register`, `POST /api/uploads/presign`, `GET|PATCH|POST /api/admin`, `POST /api/auth/login`
 
 ## Env
-See `.env.example`. R2 uses S3-compatible presigned PUT URLs (`logos/`, `banners/`, `legal-docs/`, `receipts/`).
+See `.env.example`. R2 uses S3-compatible presigned PUT URLs (`logos/`, `banners/`, `legal-docs/`).
 When deploying to Vercel, set every variable from `.env.example` in Project → Settings → Environment Variables (`DATABASE_URL`, `JWT_SECRET`, `R2_*`, `NEXT_PUBLIC_*`) — `/api/uploads/presign` returns 500 with a config hint until the `R2_*` vars exist.

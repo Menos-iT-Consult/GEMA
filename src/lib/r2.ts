@@ -35,13 +35,12 @@ export function bucketName(): string {
   return b;
 }
 
-export type UploadKind = "logos" | "banners" | "legal-docs" | "receipts";
+export type UploadKind = "logos" | "banners" | "legal-docs";
 
 const CONTENT_TYPES: Record<UploadKind, string[]> = {
   logos: ["image/png", "image/jpeg", "image/webp", "image/svg+xml"],
   banners: ["image/png", "image/jpeg", "image/webp"],
-  "legal-docs": ["application/pdf", "image/png", "image/jpeg"],
-  receipts: ["application/pdf", "image/png", "image/jpeg"]
+  "legal-docs": ["application/pdf", "image/png", "image/jpeg"]
 };
 
 export function buildR2Key(kind: UploadKind, fileName: string): string {
